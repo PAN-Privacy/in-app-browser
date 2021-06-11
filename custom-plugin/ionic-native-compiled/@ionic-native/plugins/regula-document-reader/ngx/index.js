@@ -1,0 +1,23 @@
+import { __extends } from "tslib";
+import { Injectable } from '@angular/core';
+import { IonicNativePlugin, cordova } from '@ionic-native/core';
+var RegulaDocumentReader = /** @class */ (function (_super) {
+    __extends(RegulaDocumentReader, _super);
+    function RegulaDocumentReader() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RegulaDocumentReader.prototype.initReader = function (license) { return cordova(this, "initReader", {}, arguments); };
+    RegulaDocumentReader.prototype.scanDocument = function () { return cordova(this, "scanDocument", {}, arguments); };
+    RegulaDocumentReader.pluginName = "Regula Document Reader";
+    RegulaDocumentReader.plugin = "cordova-plugin-documentreader";
+    RegulaDocumentReader.pluginRef = "DocumentReader";
+    RegulaDocumentReader.repo = "https://github.com/regulaforensics/cordova-plugin-documentreader.git";
+    RegulaDocumentReader.platforms = ["iOS", "Android"];
+    RegulaDocumentReader.install = "ionic plugin add cordova-plugin-documentreader --variable CAMERA_USAGE_DESCRIPTION=\"To take photo\"";
+    RegulaDocumentReader.decorators = [
+        { type: Injectable }
+    ];
+    return RegulaDocumentReader;
+}(IonicNativePlugin));
+export { RegulaDocumentReader };
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9zcmMvQGlvbmljLW5hdGl2ZS9wbHVnaW5zL3JlZ3VsYS1kb2N1bWVudC1yZWFkZXIvbmd4L2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQSxPQUFPLEVBQUUsVUFBVSxFQUFFLE1BQU0sZUFBZSxDQUFDO0FBQzNDLE9BQU8sOEJBQXNDLE1BQU0sb0JBQW9CLENBQUM7O0lBNkI5Qix3Q0FBaUI7Ozs7SUFNekQseUNBQVUsYUFBQyxPQUFZO0lBT3ZCLDJDQUFZOzs7Ozs7OztnQkFkYixVQUFVOzsrQkE3Qlg7RUE4QjBDLGlCQUFpQjtTQUE5QyxvQkFBb0IiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBJbmplY3RhYmxlIH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5pbXBvcnQgeyBDb3Jkb3ZhLCBJb25pY05hdGl2ZVBsdWdpbiwgUGx1Z2luIH0gZnJvbSAnQGlvbmljLW5hdGl2ZS9jb3JlJztcblxuLyoqXG4gKiBAcGFpZFxuICogQGJldGFcbiAqIEBuYW1lIFJlZ3VsYSBEb2N1bWVudCBSZWFkZXJcbiAqIEBkZXNjcmlwdGlvblxuICogUGx1Z2luIGZvciByZWFkaW5nIGFuZCB2YWxpZGF0aW9uIG9mIGlkZW50aWZpY2F0aW9uIGRvY3VtZW50cy5cbiAqXG4gKiBAdXNhZ2VcbiAqIGBgYHR5cGVzY3JpcHRcbiAqIGltcG9ydCB7IFJlZ3VsYURvY3VtZW50UmVhZGVyIH0gZnJvbSAnQGlvbmljLW5hdGl2ZS9yZWd1bGEtZG9jdW1lbnQtcmVhZGVyL25neCc7XG4gKlxuICogbGV0IGxpY2Vuc2U7IC8vIHJlYWQgcmVndWxhLmxpY2Vuc2UgZmlsZVxuICogUmVndWxhRG9jdW1lbnRSZWFkZXIuaW5pdFJlYWRlcihsaWNlbnNlKTsgLy8gaW5pdGlhbGl6ZSByZWFkZXJcbiAqIFJlZ3VsYURvY3VtZW50UmVhZGVyLnNjYW5Eb2N1bWVudCgpLnRoZW4oKHJlc3VsdCkgPT4ge1xuICogXHRcdC8vIHJlYWQgcmVzdWx0XG4gKiB9KVxuICogYGBgXG4gKi9cbkBQbHVnaW4oe1xuICBwbHVnaW5OYW1lOiAnUmVndWxhIERvY3VtZW50IFJlYWRlcicsXG4gIHBsdWdpbjogJ2NvcmRvdmEtcGx1Z2luLWRvY3VtZW50cmVhZGVyJyxcbiAgcGx1Z2luUmVmOiAnRG9jdW1lbnRSZWFkZXInLFxuICByZXBvOiAnaHR0cHM6Ly9naXRodWIuY29tL3JlZ3VsYWZvcmVuc2ljcy9jb3Jkb3ZhLXBsdWdpbi1kb2N1bWVudHJlYWRlci5naXQnLFxuICBwbGF0Zm9ybXM6IFsnaU9TJywgJ0FuZHJvaWQnXSxcbiAgaW5zdGFsbDogJ2lvbmljIHBsdWdpbiBhZGQgY29yZG92YS1wbHVnaW4tZG9jdW1lbnRyZWFkZXIgLS12YXJpYWJsZSBDQU1FUkFfVVNBR0VfREVTQ1JJUFRJT049XCJUbyB0YWtlIHBob3RvXCInLFxufSlcbkBJbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBSZWd1bGFEb2N1bWVudFJlYWRlciBleHRlbmRzIElvbmljTmF0aXZlUGx1Z2luIHtcbiAgLyoqXG4gICAqIEluaXRpYWxpemUgdGhlIHNjYW5uZXJcbiAgICogQHBhcmFtIGxpY2Vuc2Uge2FueX0gTGljZW5zZSBkYXRhXG4gICAqL1xuICBAQ29yZG92YSgpXG4gIGluaXRSZWFkZXIobGljZW5zZTogYW55KTogdm9pZCB7fVxuXG4gIC8qKlxuICAgKiBSdW4gdGhlIHNjYW5uZXJcbiAgICogQHJldHVybiB7UHJvbWlzZTxzdHJpbmdbXT59IFJldHVybnMgYSBwcm9taXNlIHRoYXQgcmVzb2x2ZXMgd2hlbiByZXN1bHRzIHdhcyBnb3QsIGFuZCBmYWlscyB3aGVuIG5vdFxuICAgKi9cbiAgQENvcmRvdmEoKVxuICBzY2FuRG9jdW1lbnQoKTogUHJvbWlzZTxzdHJpbmdbXT4ge1xuICAgIHJldHVybjtcbiAgfVxufVxuIl19

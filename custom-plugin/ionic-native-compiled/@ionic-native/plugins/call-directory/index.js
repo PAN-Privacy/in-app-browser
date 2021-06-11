@@ -1,0 +1,38 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+import { IonicNativePlugin, cordova } from '@ionic-native/core';
+var CallDirectoryOriginal = /** @class */ (function (_super) {
+    __extends(CallDirectoryOriginal, _super);
+    function CallDirectoryOriginal() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    CallDirectoryOriginal.prototype.isAvailable = function () { return cordova(this, "isAvailable", {}, arguments); };
+    CallDirectoryOriginal.prototype.addIdentification = function (items) { return cordova(this, "addIdentification", {}, arguments); };
+    CallDirectoryOriginal.prototype.removeIdentification = function (items) { return cordova(this, "removeIdentification", {}, arguments); };
+    CallDirectoryOriginal.prototype.removeAllIdentification = function () { return cordova(this, "removeAllIdentification", {}, arguments); };
+    CallDirectoryOriginal.prototype.getAllItems = function () { return cordova(this, "getAllItems", {}, arguments); };
+    CallDirectoryOriginal.prototype.reloadExtension = function () { return cordova(this, "reloadExtension", {}, arguments); };
+    CallDirectoryOriginal.prototype.getLog = function () { return cordova(this, "getLog", {}, arguments); };
+    CallDirectoryOriginal.pluginName = "CallDirectory";
+    CallDirectoryOriginal.plugin = "cordova-plugin-call-directory";
+    CallDirectoryOriginal.pluginRef = "CallDirectory";
+    CallDirectoryOriginal.repo = "https://github.com/GEDYSIntraWare/cordova-plugin-call-directory";
+    CallDirectoryOriginal.install = "cordova plugin add cordova-plugin-call-directory --variable EXT_NAME=\"Cordova-Directory\" --variable ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES=\"NO\"";
+    CallDirectoryOriginal.installVariables = ["EXT_NAME", "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES"];
+    CallDirectoryOriginal.platforms = ["iOS"];
+    return CallDirectoryOriginal;
+}(IonicNativePlugin));
+var CallDirectory = new CallDirectoryOriginal();
+export { CallDirectory };
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvQGlvbmljLW5hdGl2ZS9wbHVnaW5zL2NhbGwtZGlyZWN0b3J5L2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7QUFDQSxPQUFPLDhCQUFzQyxNQUFNLG9CQUFvQixDQUFDOztJQW1EckMsaUNBQWlCOzs7O0lBTWxELG1DQUFXO0lBVVgseUNBQWlCLGFBQUMsS0FBMEI7SUFVNUMsNENBQW9CLGFBQUMsS0FBMEI7SUFTL0MsK0NBQXVCO0lBU3ZCLG1DQUFXO0lBU1gsdUNBQWU7SUFTZiw4QkFBTTs7Ozs7Ozs7d0JBbEhSO0VBb0RtQyxpQkFBaUI7U0FBdkMsYUFBYSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IEluamVjdGFibGUgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcbmltcG9ydCB7IENvcmRvdmEsIElvbmljTmF0aXZlUGx1Z2luLCBQbHVnaW4gfSBmcm9tICdAaW9uaWMtbmF0aXZlL2NvcmUnO1xuXG5leHBvcnQgaW50ZXJmYWNlIENhbGxEaXJlY3RvcnlJdGVtIHtcbiAgbGFiZWw6IHN0cmluZztcbiAgbnVtYmVyOiBzdHJpbmc7XG59XG5cbmV4cG9ydCBpbnRlcmZhY2UgQ2FsbERpcmVjdG9yeUxvZyB7XG4gIHBsdWdpbjogc3RyaW5nW107XG4gIGV4dGVuc2lvbjogc3RyaW5nW107XG59XG5cbi8qKlxuICogQG5hbWUgQ2FsbCBEaXJlY3RvcnlcbiAqIEBkZXNjcmlwdGlvblxuICogVGhpcyBwbHVnaW4gY2FuIGFkZCBwaG9uZSBudW1iZXJzIHRvIGFuIENhbGxraXQgY2FsbCBkaXJlY3RvcnkgZXh0ZW5zaW9uLiBDYWxsIGByZWxvYWRFeHRlbnNpb25gIGFmdGVyIHVzaW5nIGBhZGRJZGVudGlmaWNhdGlvbmAgYW5kIGByZW1vdmVJZGVudGlmaWNhdGlvbmBcbiAqIHRvIHByb2Nlc3MgdGhlIGNoYW5nZXMgaW4gdGhlIGNhbGwgZGlyZWN0b3J5IGV4dGVuc2lvbi5cbiAqXG4gKiBAdXNhZ2VcbiAqIGBgYHR5cGVzY3JpcHRcbiAqIGltcG9ydCB7IENhbGxEaXJlY3RvcnkgfSBmcm9tICdAaW9uaWMtbmF0aXZlL2NhbGwtZGlyZWN0b3J5L25neCc7XG4gKlxuICpcbiAqIGNvbnN0cnVjdG9yKHByaXZhdGUgY2FsbERpcmVjdG9yeTogQ2FsbERpcmVjdG9yeSkgeyB9XG4gKlxuICpcbiAqIGxldCBpdGVtcyA9IFt7bGFiZWw6IFwiSGVsbG9cIiwgbnVtYmVyOiBcIjEyM1wifV07XG4gKiB0aGlzLmNhbGxEaXJlY3RvcnkuYWRkSWRlbnRpZmljYXRpb24oaXRlbXMpXG4gKiAgIC50aGVuKChyZXM6IGFueSkgPT4gY29uc29sZS5sb2cocmVzKSlcbiAqICAgLmNhdGNoKChlcnJvcjogYW55KSA9PiBjb25zb2xlLmVycm9yKGVycm9yKSk7XG4gKlxuICogdGhpcy5jYWxsRGlyZWN0b3J5LnJlbG9hZEV4dGVuc2lvbigpXG4gKiAgIC50aGVuKHJlczogc3RyaW5nKSA9PiBjb25zb2xlLmxvZyhyZXMpKVxuICogICAuY2F0Y2goKGVycm9yOiBhbnkpID0+IGNvbnNvbGUuZXJyb3IoZXJyb3IpKTtcbiAqIGBgYFxuICpcbiAqIEBJbnRlcmZhY2VzXG4gKiBDYWxsRGlyZWN0b3J5SXRlbVxuICogQ2FsbERpcmVjdG9yeUxvZ1xuICovXG5AUGx1Z2luKHtcbiAgcGx1Z2luTmFtZTogJ0NhbGxEaXJlY3RvcnknLFxuICBwbHVnaW46ICdjb3Jkb3ZhLXBsdWdpbi1jYWxsLWRpcmVjdG9yeScsXG4gIHBsdWdpblJlZjogJ0NhbGxEaXJlY3RvcnknLFxuICByZXBvOiAnaHR0cHM6Ly9naXRodWIuY29tL0dFRFlTSW50cmFXYXJlL2NvcmRvdmEtcGx1Z2luLWNhbGwtZGlyZWN0b3J5JyxcbiAgaW5zdGFsbDpcbiAgICAnY29yZG92YSBwbHVnaW4gYWRkIGNvcmRvdmEtcGx1Z2luLWNhbGwtZGlyZWN0b3J5IC0tdmFyaWFibGUgRVhUX05BTUU9XCJDb3Jkb3ZhLURpcmVjdG9yeVwiIC0tdmFyaWFibGUgQUxXQVlTX0VNQkVEX1NXSUZUX1NUQU5EQVJEX0xJQlJBUklFUz1cIk5PXCInLFxuICBpbnN0YWxsVmFyaWFibGVzOiBbJ0VYVF9OQU1FJywgJ0FMV0FZU19FTUJFRF9TV0lGVF9TVEFOREFSRF9MSUJSQVJJRVMnXSxcbiAgcGxhdGZvcm1zOiBbJ2lPUyddLFxufSlcbkBJbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBDYWxsRGlyZWN0b3J5IGV4dGVuZHMgSW9uaWNOYXRpdmVQbHVnaW4ge1xuICAvKipcbiAgICogQ2hlY2sgaWYgdGhlIGNhbGwgZGlyZWN0b3J5IGV4dGVuc2lvbiBpcyBhdmFpbGFibGUgYW5kIGVuYWJsZWRcbiAgICogQHJldHVybiB7UHJvbWlzZTxib29sZWFuPn0gUmV0dXJucyBhIHByb21pc2Ugd2l0aCByZXN1bHRcbiAgICovXG4gIEBDb3Jkb3ZhKClcbiAgaXNBdmFpbGFibGUoKTogUHJvbWlzZTxib29sZWFuPiB7XG4gICAgcmV0dXJuO1xuICB9XG5cbiAgLyoqXG4gICAqIEFkZCBpZGVudGlmaWNhdGlvbiBudW1iZXJzXG4gICAqIEBwYXJhbSB7Q2FsbERpcmVjdG9yeUl0ZW1bXX0gaXRlbXMgU2V0IG9mIG51bWJlcnMgd2l0aCBsYWJlbHNcbiAgICogQHJldHVybiB7UHJvbWlzZTxhbnk+fSBSZXR1cm5zIGEgcHJvbWlzZSB0aGF0IHJlc29sdmVzIHdoZW4gbnVtYmVycyBhcmUgYWRkZWRcbiAgICovXG4gIEBDb3Jkb3ZhKClcbiAgYWRkSWRlbnRpZmljYXRpb24oaXRlbXM6IENhbGxEaXJlY3RvcnlJdGVtW10pOiBQcm9taXNlPGFueT4ge1xuICAgIHJldHVybjtcbiAgfVxuXG4gIC8qKlxuICAgKiBSZW1vdmUgaWRlbnRpZmljYXRpb24gbnVtYmVyc1xuICAgKiBAcGFyYW0ge0NhbGxEaXJlY3RvcnlJdGVtW119IGl0ZW1zIFNldCBvZiBudW1iZXJzIHdpdGggYXJiaXRyYXJ5IGxhYmVsXG4gICAqIEByZXR1cm4ge1Byb21pc2U8YW55Pn0gUmV0dXJucyBhIHByb21pc2UgdGhhdCByZXNvbHZlcyB3aGVuIG51bWJlcnMgYXJlIHJlbW92ZWRcbiAgICovXG4gIEBDb3Jkb3ZhKClcbiAgcmVtb3ZlSWRlbnRpZmljYXRpb24oaXRlbXM6IENhbGxEaXJlY3RvcnlJdGVtW10pOiBQcm9taXNlPGFueT4ge1xuICAgIHJldHVybjtcbiAgfVxuXG4gIC8qKlxuICAgKiBSZW1vdmUgYWxsIGl0ZW1zIGZyb20gY2FsbCBkaXJlY3RvcnkuIFJlZnJlc2hlcyBpbW1lZGlhdGVseS5cbiAgICogQHJldHVybiB7UHJvbWlzZTxhbnk+fSBSZXR1cm5zIGEgcHJvbWlzZSBhZnRlciByZWZyZXNoIHdpdGggbWVzc2FnZVxuICAgKi9cbiAgQENvcmRvdmEoKVxuICByZW1vdmVBbGxJZGVudGlmaWNhdGlvbigpOiBQcm9taXNlPGFueT4ge1xuICAgIHJldHVybjtcbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgYWxsIG51bWJlcnMgYW5kIGxhYmVscyBpbiBjYWxsIGRpcmVjdG9yeVxuICAgKiBAcmV0dXJuIHtDYWxsRGlyZWN0b3J5SXRlbVtdfSBSZXR1cm5zIGEgcHJvbWlzZSB0aGF0IHJlc29sdmVzIHdpdGggYW4gYXJyYXkgb2YgYWxsIGl0ZW1zXG4gICAqL1xuICBAQ29yZG92YSgpXG4gIGdldEFsbEl0ZW1zKCk6IFByb21pc2U8Q2FsbERpcmVjdG9yeUl0ZW1bXT4ge1xuICAgIHJldHVybjtcbiAgfVxuXG4gIC8qKlxuICAgKiBSZWxvYWQgZXh0ZW5zaW9uIHRvIHByb2Nlc3MgcXVldWVkIGNoYW5nZXNcbiAgICogQHJldHVybiB7UHJvbWlzZTxzdHJpbmc+fSBSZXR1cm5zIGEgcHJvbWlzZSBhZnRlciByZWZyZXNoIHdpdGggbWVzc2FnZVxuICAgKi9cbiAgQENvcmRvdmEoKVxuICByZWxvYWRFeHRlbnNpb24oKTogUHJvbWlzZTxzdHJpbmc+IHtcbiAgICByZXR1cm47XG4gIH1cblxuICAvKipcbiAgICogR2V0IGxvZyBmcm9tIHBsdWdpbiBhbmQgY2FsbCBkaXJlY3RvcnkgZXh0ZW5zaW9uXG4gICAqIEByZXR1cm4ge1Byb21pc2U8Q2FsbERpcmVjdG9yeUxvZz59IFJldHVybnMgYSBwcm9taXNlIHdpdGggYW4gb2JqZWN0IG9mIGxvZyBtZXNzYWdlc1xuICAgKi9cbiAgQENvcmRvdmEoKVxuICBnZXRMb2coKTogUHJvbWlzZTxDYWxsRGlyZWN0b3J5TG9nPiB7XG4gICAgcmV0dXJuO1xuICB9XG59XG4iXX0=

@@ -1,0 +1,25 @@
+import { __extends } from "tslib";
+import { Injectable } from '@angular/core';
+import { IonicNativePlugin, cordova } from '@ionic-native/core';
+import { Observable } from 'rxjs';
+var GoogleNearby = /** @class */ (function (_super) {
+    __extends(GoogleNearby, _super);
+    function GoogleNearby() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    GoogleNearby.prototype.publish = function (message) { return cordova(this, "publish", {}, arguments); };
+    GoogleNearby.prototype.subscribe = function () { return cordova(this, "subscribe", { "observable": true, "clearFunction": "unsubscribe" }, arguments); };
+    GoogleNearby.pluginName = "GoogleNearby";
+    GoogleNearby.plugin = "cordova-plugin-google-nearby";
+    GoogleNearby.pluginRef = "window.nearby";
+    GoogleNearby.repo = "https://github.com/hahahannes/cordova-plugin-google-nearby";
+    GoogleNearby.install = "ionic cordova plugin add cordova-plugin-google-nearby --variable API_KEY=\"123456789\"";
+    GoogleNearby.installVariables = ["API_KEY"];
+    GoogleNearby.platforms = ["Android"];
+    GoogleNearby.decorators = [
+        { type: Injectable }
+    ];
+    return GoogleNearby;
+}(IonicNativePlugin));
+export { GoogleNearby };
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9zcmMvQGlvbmljLW5hdGl2ZS9wbHVnaW5zL2dvb2dsZS1uZWFyYnkvbmd4L2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQSxPQUFPLEVBQUUsVUFBVSxFQUFFLE1BQU0sZUFBZSxDQUFDO0FBQzNDLE9BQU8sOEJBQXNDLE1BQU0sb0JBQW9CLENBQUM7QUFDeEUsT0FBTyxFQUFFLFVBQVUsRUFBRSxNQUFNLE1BQU0sQ0FBQzs7SUFpQ0EsZ0NBQWlCOzs7O0lBT2pELDhCQUFPLGFBQUMsT0FBZTtJQVl2QixnQ0FBUzs7Ozs7Ozs7O2dCQXBCVixVQUFVOzt1QkFsQ1g7RUFtQ2tDLGlCQUFpQjtTQUF0QyxZQUFZIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgSW5qZWN0YWJsZSB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xuaW1wb3J0IHsgQ29yZG92YSwgSW9uaWNOYXRpdmVQbHVnaW4sIFBsdWdpbiB9IGZyb20gJ0Bpb25pYy1uYXRpdmUvY29yZSc7XG5pbXBvcnQgeyBPYnNlcnZhYmxlIH0gZnJvbSAncnhqcyc7XG5cbi8qKlxuICogQG5hbWUgR29vZ2xlIE5lYXJieVxuICogQGRlc2NyaXB0aW9uXG4gKiBUaGlzIHBsdWdpbiBhZGRzIHN1cHBvcnQgZm9yIHRoZSBHb29nbGUgTmVhcmJ5IE1lc3NhZ2VzIEFQSS5cbiAqXG4gKiBAdXNhZ2VcbiAqIGBgYHR5cGVzY3JpcHRcbiAqIGltcG9ydCB7IEdvb2dsZU5lYXJieSB9IGZyb20gJ0Bpb25pYy1uYXRpdmUvZ29vZ2xlLW5lYXJieS9uZ3gnO1xuICpcbiAqXG4gKiBjb25zdHJ1Y3Rvcihwcml2YXRlIGdvb2dsZU5lYXJieTogR29vZ2xlTmVhcmJ5KSB7IH1cbiAqXG4gKiB0aGlzLmdvb2dsZU5lYXJieS5wdWJsaXNoKCdIZWxsbycpXG4gKiAgIC50aGVuKChyZXM6IGFueSkgPT4gY29uc29sZS5sb2cocmVzKSlcbiAqICAgLmNhdGNoKChlcnJvcjogYW55KSA9PiBjb25zb2xlLmVycm9yKGVycm9yKSk7XG4gKlxuICogdGhpcy5nb29nbGVOZWFyYnkuc3Vic2NyaWJlKClcbiAqICAgLnRoZW4oKHJlczogYW55KSA9PiBjb25zb2xlLmxvZyhyZXMpKVxuICogICAuY2F0Y2goKGVycm9yOiBhbnkpID0+IGNvbnNvbGUuZXJyb3IoZXJyb3IpKTtcbiAqIGBgYFxuICovXG5AUGx1Z2luKHtcbiAgcGx1Z2luTmFtZTogJ0dvb2dsZU5lYXJieScsXG4gIHBsdWdpbjogJ2NvcmRvdmEtcGx1Z2luLWdvb2dsZS1uZWFyYnknLFxuICBwbHVnaW5SZWY6ICd3aW5kb3cubmVhcmJ5JyxcbiAgcmVwbzogJ2h0dHBzOi8vZ2l0aHViLmNvbS9oYWhhaGFubmVzL2NvcmRvdmEtcGx1Z2luLWdvb2dsZS1uZWFyYnknLFxuICBpbnN0YWxsOiAnaW9uaWMgY29yZG92YSBwbHVnaW4gYWRkIGNvcmRvdmEtcGx1Z2luLWdvb2dsZS1uZWFyYnkgLS12YXJpYWJsZSBBUElfS0VZPVwiMTIzNDU2Nzg5XCInLFxuICBpbnN0YWxsVmFyaWFibGVzOiBbJ0FQSV9LRVknXSxcbiAgcGxhdGZvcm1zOiBbJ0FuZHJvaWQnXSxcbn0pXG5ASW5qZWN0YWJsZSgpXG5leHBvcnQgY2xhc3MgR29vZ2xlTmVhcmJ5IGV4dGVuZHMgSW9uaWNOYXRpdmVQbHVnaW4ge1xuICAvKipcbiAgICogUHVibGlzaCBhIG1lc3NhZ2VcbiAgICogQHBhcmFtIG1lc3NhZ2Uge3N0cmluZ30gTWVzc2FnZSB0byBwdWJsaXNoXG4gICAqIEByZXR1cm4ge1Byb21pc2U8YW55Pn0gUmV0dXJucyBhIHByb21pc2UgdGhhdCByZXNvbHZlcyB3aGVuIHRoZSBtZXNzYWdlIGdvdCBwdWJsaXNoZWRcbiAgICovXG4gIEBDb3Jkb3ZhKClcbiAgcHVibGlzaChtZXNzYWdlOiBzdHJpbmcpOiBQcm9taXNlPGFueT4ge1xuICAgIHJldHVybjtcbiAgfVxuXG4gIC8qKlxuICAgKiBTdWJzY3JpYmUgdG8gcmVjZWl2ZSBtZXNzYWdlc1xuICAgKiBAcmV0dXJuIHtPYnNlcnZhYmxlPGFueT59IFJldHVybnMgYW4gb2JzZXJ2YWJsZSB0aGF0IGVtaXRzIHJlY2VpdmVkIG1lc3NhZ2VzXG4gICAqL1xuICBAQ29yZG92YSh7XG4gICAgb2JzZXJ2YWJsZTogdHJ1ZSxcbiAgICBjbGVhckZ1bmN0aW9uOiAndW5zdWJzY3JpYmUnLFxuICB9KVxuICBzdWJzY3JpYmUoKTogT2JzZXJ2YWJsZTxhbnk+IHtcbiAgICByZXR1cm47XG4gIH1cbn1cbiJdfQ==

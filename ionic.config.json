@@ -1,0 +1,7 @@
+{
+  "name": "iab-project",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

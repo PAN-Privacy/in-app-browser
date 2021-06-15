@@ -72,6 +72,8 @@
         <resource-file src="src/android/res/drawable-xxhdpi/ic_lock.png" target="res/drawable-xxhdpi/ic_lock.png" />
 
         <resource-file src="src/android/res/drawable/top_shadow_gradient.xml" target="res/drawable/top_shadow_gradient.xml" />
+
+        <resource-file src="src/android/res/values/styles.xml" target="res/values/styles.xml" />
     </platform>
 
     <!-- ios -->

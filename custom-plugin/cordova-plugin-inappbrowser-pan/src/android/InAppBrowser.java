@@ -118,6 +118,7 @@ public class InAppBrowser extends CordovaPlugin {
     private static final String TOOLBAR_COLOR = "toolbarcolor";
     private static final String CLOSE_BUTTON_CAPTION = "closebuttoncaption";
     private static final String CLOSE_BUTTON_COLOR = "closebuttoncolor";
+    private static final String CLOSE_BUTTON_FONT_FAMILY = "closeButtonFontFamily";
     private static final String LEFT_TO_RIGHT = "lefttoright";
     private static final String HIDE_NAVIGATION = "hidenavigationbuttons";
     private static final String NAVIGATION_COLOR = "navigationbuttoncolor";
@@ -138,7 +139,7 @@ public class InAppBrowser extends CordovaPlugin {
     private static final String FOOTER_TEXT = "footerText";
     private static final String FOOTER_IMAGE = "footerImage";
 
-    private static final List customizableOptions = Arrays.asList(CLOSE_BUTTON_CAPTION, TOOLBAR_COLOR, NAVIGATION_COLOR, CLOSE_BUTTON_COLOR, FOOTER_COLOR, LOCATION_BAR_TEXT_COLOR, HELP_BUTTON_TEXT, HELP_BUTTON_COLOR, FOOTER_TEXT_COLOR, FOOTER_TEXT, FOOTER_FONT_FAMILY, HELP_BUTTON_FONT_FAMILY, LOCATION_BAR_FONT_FAMILY,FOOTER_IMAGE);
+    private static final List customizableOptions = Arrays.asList(CLOSE_BUTTON_CAPTION, TOOLBAR_COLOR, NAVIGATION_COLOR, CLOSE_BUTTON_COLOR,CLOSE_BUTTON_FONT_FAMILY, FOOTER_COLOR, LOCATION_BAR_TEXT_COLOR, HELP_BUTTON_TEXT, HELP_BUTTON_COLOR, FOOTER_TEXT_COLOR, FOOTER_TEXT, FOOTER_FONT_FAMILY, HELP_BUTTON_FONT_FAMILY, LOCATION_BAR_FONT_FAMILY,FOOTER_IMAGE);
 
     private InAppBrowserDialog dialog;
     private WebView inAppWebView;
@@ -157,6 +158,7 @@ public class InAppBrowser extends CordovaPlugin {
     private final static int FILECHOOSER_REQUESTCODE = 1;
     private String closeButtonCaption = "";
     private String closeButtonColor = "";
+    private String closeButtonFontFamily = "";
     private boolean leftToRight = false;
     private int toolbarColor = android.graphics.Color.LTGRAY;
     private boolean hideNavigationButtons = false;
@@ -738,6 +740,10 @@ public class InAppBrowser extends CordovaPlugin {
             if (closeButtonColorSet != null) {
                 closeButtonColor = closeButtonColorSet;
             }
+            String closeButtonFont = features.get(CLOSE_BUTTON_FONT_FAMILY);
+            if (closeButtonFont != null) {
+              closeButtonFontFamily = closeButtonFont;
+            }
             String leftToRightSet = features.get(LEFT_TO_RIGHT);
             leftToRight = leftToRightSet != null && leftToRightSet.equals("yes");
 
@@ -786,18 +792,25 @@ public class InAppBrowser extends CordovaPlugin {
 
             private View createCloseButton(int id) {
                 View _close;
+                boolean invisible = false;
                 Resources activityRes = cordova.getActivity().getResources();
 
                 if (closeButtonCaption != "") {
-                    // Use TextView for text
-                    TextView close = new TextView(cordova.getActivity());
-                    close.setText(closeButtonCaption);
-                    close.setTextSize(20);
-                    if (closeButtonColor != "") close.setTextColor(android.graphics.Color.parseColor(closeButtonColor));
-                    close.setGravity(android.view.Gravity.CENTER_VERTICAL);
-                    close.setPadding(this.dpToPixels(10), 0, this.dpToPixels(10), 0);
-                    _close = close;
+                  // Use TextView for text
+                  TextView close = new TextView(cordova.getActivity());
+                  close.setText(closeButtonCaption);
+                  close.setTextSize(16);
+                  if (closeButtonColor != "")
+                    close.setTextColor(android.graphics.Color.parseColor(closeButtonColor));
+                  close.setGravity(android.view.Gravity.CENTER_VERTICAL);
+                  close.setPadding(this.dpToPixels(10), 0, this.dpToPixels(10), 0);
+                  _close = close;
+                  if(closeButtonFontFamily != "") {
+                    Typeface typeface = getFontFromFromName(closeButtonFontFamily);
+                    close.setTypeface(typeface);
+                  }
                 }
+
                 else {
                     ImageButton close = new ImageButton(cordova.getActivity());
                     int closeResId = activityRes.getIdentifier("ic_action_remove", "drawable", cordova.getActivity().getPackageName());
@@ -806,25 +819,31 @@ public class InAppBrowser extends CordovaPlugin {
                     close.setImageDrawable(closeIcon);
                     close.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     close.getAdjustViewBounds();
+                    invisible = true;
 
                     _close = close;
                 }
 
-                RelativeLayout.LayoutParams closeLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-                if (leftToRight) closeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                else closeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                _close.setLayoutParams(closeLayoutParams);
-                _close.setBackground(null);
+                  RelativeLayout.LayoutParams closeLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+                  if (leftToRight) closeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                  else closeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                  _close.setLayoutParams(closeLayoutParams);
+                  _close.setBackground(null);
 
-                _close.setContentDescription("Close Button");
-                _close.setId(Integer.valueOf(id));
-                _close.setOnClickListener(new View.OnClickListener() {
+                  _close.setContentDescription("Close Button");
+                  _close.setId(Integer.valueOf(id));
+                  _close.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        closeDialog();
+                      closeDialog();
                     }
-                });
+                  });
+                  if(invisible){
+                    _close.setOnClickListener(null);
+                    _close.setVisibility(View.INVISIBLE);
+                  }
 
-                return _close;
+                  return _close;
+
             }
 
             @SuppressLint("NewApi")
@@ -836,7 +855,9 @@ public class InAppBrowser extends CordovaPlugin {
                 };
 
                 // Let's create the main dialog
-                dialog = new InAppBrowserDialog(cordova.getActivity(), android.R.style.Theme_NoTitleBar);
+                dialog = new InAppBrowserDialog(cordova.getActivity(), R.style.Theme_Transparent);
+
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.getWindow().getAttributes().windowAnimations = android.R.style.Animation_Dialog;
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 if (fullscreen) {
@@ -844,9 +865,15 @@ public class InAppBrowser extends CordovaPlugin {
                 }
                 dialog.setCancelable(true);
                 dialog.setInAppBroswer(getInAppBrowser());
+//                dialog.setMargins(0,20,0,0);
 
                 // Main container layout
                 LinearLayout main = new LinearLayout(cordova.getActivity());
+                //Add top padding
+//                LinearLayout.LayoutParams mainLayoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                main.setPadding(0,this.dpToPixels(30),0,0);
+                main.setBackgroundColor(Color.TRANSPARENT);
+//                main.setLayoutParams(mainLayoutParams);
                 main.setOrientation(LinearLayout.VERTICAL);
 
                 // Toolbar layout
@@ -965,8 +992,6 @@ public class InAppBrowser extends CordovaPlugin {
                 // Header Close/Done button
                 int closeButtonId = leftToRight ? 1 : 5;
                 View close = createCloseButton(closeButtonId);
-                close.setVisibility(View.INVISIBLE);
-                close.setOnClickListener(null);
                 toolbar.addView(close);
 
                 // Footer

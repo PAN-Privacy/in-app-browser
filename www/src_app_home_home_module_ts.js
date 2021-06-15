@@ -114,6 +114,9 @@ let HomePage = class HomePage {
             locationTextColor: '#FFFFFF',
             helpButtonText: 'Help',
             helpButtonColor: '#367EB5',
+            closebuttoncaption: 'Close-1',
+            closebuttoncolor: '#FFFF00',
+            // closeButtonFontFamily: 'stint_ultra',
             footerText: 'Your data never leaves your phone without your consent. Pan never sells your data.',
             footerTextColor: '#132059',
             footerImage: 'lock.png', //with ext will look into /assets/icon folder
@@ -124,6 +127,9 @@ let HomePage = class HomePage {
         const iab = this.iab.create('https://linkedin.com', '_blank', options);
         iab.on('helpclick').subscribe(e => {
             alert('help clicked' + JSON.stringify(e));
+        });
+        iab.on('exit').subscribe(e => {
+            alert('exit' + JSON.stringify(e));
         });
     }
 };

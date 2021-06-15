@@ -49,6 +49,12 @@ export interface InAppBrowserOptions {
      */
     helpFontFamily?: string;
     /**
+     * Close Button text font family.
+     * font file should be placed in the /assets/fonts/ folder.
+     * Please Note: Only .ttf fonts are supported.
+     */
+    closeButtonFontFamily?: string;
+    /**
      * (iOS Only) Set to yes or no to allow in-line HTML5 media playback, displaying within the browser window rather than a device-specific playback interface.
      * The HTML's video element must also include the webkit-playsinline attribute (defaults to no)
      */
@@ -160,7 +166,7 @@ export interface InAppBrowserOptions {
      */
     [key: string]: any;
 }
-export declare type InAppBrowserEventType = 'loadstart' | 'helpclick' | 'loadstop' | 'loaderror' | 'exit' | 'beforeload' | 'message' | 'customscheme';
+export declare type InAppBrowserEventType = 'loadstart' | 'helpclick' | 'closeclick' | 'loadstop' | 'loaderror' | 'exit' | 'beforeload' | 'message' | 'customscheme';
 export interface InAppBrowserEvent extends Event {
     /** the event name */
     type: string;

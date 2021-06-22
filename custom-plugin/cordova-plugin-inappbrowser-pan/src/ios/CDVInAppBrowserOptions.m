@@ -28,7 +28,7 @@
         self.location = YES;
         self.toolbar = YES;
         self.closebuttoncaption = nil;
-        self.toolbarposition = @"bottom";
+        self.toolbarposition = @"top";
         self.cleardata = NO;
         self.clearcache = NO;
         self.clearsessioncache = NO;
@@ -41,10 +41,24 @@
         self.disallowoverscroll = NO;
         self.hidenavigationbuttons = NO;
         self.closebuttoncolor = nil;
+        self.closebuttonfontfamily = nil;
+        self.helpfontfamily = nil;
+        self.locationfontfamily = nil;
+        self.footerfontfamily= nil;
         self.lefttoright = false;
         self.toolbarcolor = nil;
         self.toolbartranslucent = YES;
         self.beforeload = @"";
+        self.helpbuttontext = nil;
+        self.helpbuttoncolor = nil;
+        self.footertext = nil;
+        self.footertextcolor = nil;
+        self.footerimage = nil;
+        self.helppopuptext = nil;
+        self.ioshelpfontfamily = nil;
+        self.iosfooterfontfamily = nil;
+        self.ioslocationfontfamily = nil;
+        self.iosclosebuttonfontfamily = nil;
     }
 
     return self;

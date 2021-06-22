@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "~12.0.1",
     "@angular/router": "~12.0.1",
     "@ionic-native/core": "^5.33.1",
+    "@ionic-native/in-app-browser-pan": "file:custom-plugin/iab-pan.tgz",
     "@ionic/angular": "^5.5.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
@@ -42,6 +43,7 @@
     "@typescript-eslint/eslint-plugin": "4.16.1",
     "@typescript-eslint/parser": "4.16.1",
     "cordova-android": "^9.1.0",
+    "cordova-ios": "^6.2.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-inappbrowser-pan": "file:custom-plugin/cordova-plugin-inappbrowser-pan",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
@@ -79,6 +81,7 @@
       "cordova-plugin-inappbrowser-pan": {}
     },
     "platforms": [
+      "ios",
       "android"
     ]
   }

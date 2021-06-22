@@ -24,9 +24,25 @@
 @property (nonatomic, assign) BOOL toolbar;
 @property (nonatomic, copy) NSString* closebuttoncaption;
 @property (nonatomic, copy) NSString* closebuttoncolor;
+@property (nonatomic, copy) NSString* helpbuttontext;
+@property (nonatomic, copy) NSString* helpbuttoncolor;
+@property (nonatomic, copy) NSString* footertext;
+@property (nonatomic, copy) NSString* footertextcolor;
+@property (nonatomic, copy) NSString* footerimage;
 @property (nonatomic, assign) BOOL lefttoright;
 @property (nonatomic, copy) NSString* toolbarposition;
 @property (nonatomic, copy) NSString* toolbarcolor;
+
+@property (nonatomic, copy) NSString* footerfontfamily;
+@property (nonatomic, copy) NSString* closebuttonfontfamily;
+@property (nonatomic, copy) NSString* helpfontfamily;
+@property (nonatomic, copy) NSString* locationfontfamily;
+@property (nonatomic, copy) NSString* iosfooterfontfamily;
+@property (nonatomic, copy) NSString* iosclosebuttonfontfamily;
+@property (nonatomic, copy) NSString* ioshelpfontfamily;
+@property (nonatomic, copy) NSString* ioslocationfontfamily;
+@property (nonatomic, copy) NSString* helppopuptext;
+
 @property (nonatomic, assign) BOOL toolbartranslucent;
 @property (nonatomic, assign) BOOL hidenavigationbuttons;
 @property (nonatomic, copy) NSString* navigationbuttoncolor;

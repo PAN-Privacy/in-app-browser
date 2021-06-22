@@ -72,12 +72,18 @@
         <resource-file src="src/android/res/drawable-xxhdpi/ic_lock.png" target="res/drawable-xxhdpi/ic_lock.png" />
 
         <resource-file src="src/android/res/drawable/top_shadow_gradient.xml" target="res/drawable/top_shadow_gradient.xml" />
+        <resource-file src="src/android/res/drawable/shadow.xml" target="res/drawable/shadow.xml" />
 
         <resource-file src="src/android/res/values/styles.xml" target="res/values/styles.xml" />
     </platform>
 
     <!-- ios -->
     <platform name="ios">
+        <config-file target="*-Info.plist" parent="UIAppFonts">
+            <array>
+                <string>stint_ultra.ttf</string>
+            </array>
+        </config-file>
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser.open" />
         </js-module>
@@ -95,6 +101,12 @@
 	    <source-file src="src/ios/CDVWKInAppBrowser.m" />
 	    <header-file src="src/ios/CDVWKInAppBrowserUIDelegate.h" />
 	    <source-file src="src/ios/CDVWKInAppBrowserUIDelegate.m" />
+
+        <resource-file src="src/ios/Images.xcassets/lock.png" target="Images.xcassets/lock.png"/>
+        <resource-file src="src/ios/Images.xcassets/lockicon.png" target="Images.xcassets/lockicon.png"/>
+        <resource-file src="src/ios/Images.xcassets/closeIcon.png" target="Images.xcassets/closeIcon.png"/>
+
+        <resource-file src="src/ios/Fonts/stint_ultra.ttf" target="asset/stint_ultra.ttf" />
 
 	    <framework src="CoreGraphics.framework" />
     </platform>

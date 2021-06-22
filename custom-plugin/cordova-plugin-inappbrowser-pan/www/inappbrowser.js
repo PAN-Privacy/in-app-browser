@@ -29,8 +29,6 @@
         this.channels = {
             beforeload: channel.create('beforeload'),
             loadstart: channel.create('loadstart'),
-            helpclick: channel.create('helpclick'),
-            closeclick: channel.create('closeclick'),
             loadstop: channel.create('loadstop'),
             loaderror: channel.create('loaderror'),
             exit: channel.create('exit'),

@@ -95,16 +95,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! tslib */ 4762);
 /* harmony import */ var _raw_loader_home_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !raw-loader!./home.page.html */ 9764);
 /* harmony import */ var _home_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./home.page.scss */ 2610);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 7716);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 7716);
 /* harmony import */ var _ionic_native_in_app_browser_pan_ngx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic-native/in-app-browser-pan/ngx */ 2808);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic/angular */ 476);
+
 
 
 
 
 
 let HomePage = class HomePage {
-    constructor(iab) {
+    constructor(iab, actionSheetController) {
         this.iab = iab;
+        this.actionSheetController = actionSheetController;
     }
     openBrowser() {
         const options = {
@@ -114,30 +117,62 @@ let HomePage = class HomePage {
             locationTextColor: '#FFFFFF',
             helpButtonText: 'Help',
             helpButtonColor: '#367EB5',
-            closebuttoncaption: 'Close-1',
+            helpPopUpText: 'This is a popup text appear on help button click.',
+            closebuttoncaption: 'close-1',
             closebuttoncolor: '#FFFF00',
-            // closeButtonFontFamily: 'stint_ultra',
             footerText: 'Your data never leaves your phone without your consent. Pan never sells your data.',
             footerTextColor: '#132059',
-            footerImage: 'lock.png', //with ext will look into /assets/icon folder
-            // footerFontFamily: 'stint_ultra', //only name, will pick from /assets/fonts/ folder
-            // locationFontFamily: 'stint_ultra',
-            // helpFontFamily: 'stint_ultra',
+            footerImage: 'lock.png',
+            footerFontFamily: 'stint_ultra',
+            closeButtonFontFamily: 'stint_ultra',
+            locationFontFamily: 'stint_ultra',
+            helpFontFamily: 'stint_ultra',
+            iosFooterFontFamily: 'StintUltraCondensed-Regular',
+            iosCloseButtonFontFamily: 'StintUltraCondensed-Regular',
+            iosLocationFontFamily: 'StintUltraCondensed-Regular',
+            iosHelpFontFamily: 'StintUltraCondensed-Regular',
         };
         const iab = this.iab.create('https://linkedin.com', '_blank', options);
-        iab.on('helpclick').subscribe(e => {
-            alert('help clicked' + JSON.stringify(e));
-        });
         iab.on('exit').subscribe(e => {
             alert('exit' + JSON.stringify(e));
         });
     }
+    presentActionSheet() {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__awaiter)(this, void 0, void 0, function* () {
+            const actionSheet = yield this.actionSheetController.create({
+                header: 'Albums',
+                buttons: [{
+                        text: 'Delete',
+                        role: 'destructive',
+                        icon: 'trash',
+                        handler: () => {
+                            console.log('Delete clicked');
+                        }
+                    }, {
+                        text: 'Share',
+                        icon: 'share',
+                        handler: () => {
+                            console.log('Share clicked');
+                        }
+                    }, {
+                        text: 'Cancel',
+                        icon: 'close',
+                        role: 'cancel',
+                        handler: () => {
+                            console.log('Cancel clicked');
+                        }
+                    }]
+            });
+            yield actionSheet.present();
+        });
+    }
 };
 HomePage.ctorParameters = () => [
-    { type: _ionic_native_in_app_browser_pan_ngx__WEBPACK_IMPORTED_MODULE_2__.InAppBrowser }
+    { type: _ionic_native_in_app_browser_pan_ngx__WEBPACK_IMPORTED_MODULE_2__.InAppBrowser },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__.ActionSheetController }
 ];
 HomePage = (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_4__.Component)({
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_5__.Component)({
         selector: 'app-home',
         template: _raw_loader_home_page_html__WEBPACK_IMPORTED_MODULE_0__.default,
         styles: [_home_page_scss__WEBPACK_IMPORTED_MODULE_1__.default]

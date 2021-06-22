@@ -6,9 +6,9 @@
  to you under the Apache License, Version 2.0 (the
  "License"); you may not use this file except in compliance
  with the License.  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing,
  software distributed under the License is distributed on an
  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,7 +27,7 @@
     if (self) {
         self.title = title;
     }
-
+    
     return self;
 }
 
@@ -37,17 +37,17 @@
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:self.title
                                                                    message:message
                                                             preferredStyle:UIAlertControllerStyleAlert];
-
+    
     UIAlertAction* ok = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK")
                                                  style:UIAlertActionStyleDefault
                                                handler:^(UIAlertAction* action)
-        {
-            completionHandler();
-            [alert dismissViewControllerAnimated:YES completion:nil];
-        }];
-
+                         {
+        completionHandler();
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
     [alert addAction:ok];
-
+    
     [[self getViewController] presentViewController:alert animated:YES completion:nil];
 }
 
@@ -57,26 +57,26 @@
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:self.title
                                                                    message:message
                                                             preferredStyle:UIAlertControllerStyleAlert];
-
+    
     UIAlertAction* ok = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK")
                                                  style:UIAlertActionStyleDefault
                                                handler:^(UIAlertAction* action)
-        {
-            completionHandler(YES);
-            [alert dismissViewControllerAnimated:YES completion:nil];
-        }];
-
+                         {
+        completionHandler(YES);
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
     [alert addAction:ok];
-
+    
     UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel")
                                                      style:UIAlertActionStyleDefault
                                                    handler:^(UIAlertAction* action)
-        {
-            completionHandler(NO);
-            [alert dismissViewControllerAnimated:YES completion:nil];
-        }];
+                             {
+        completionHandler(NO);
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
     [alert addAction:cancel];
-
+    
     [[self getViewController] presentViewController:alert animated:YES completion:nil];
 }
 
@@ -87,30 +87,30 @@
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:self.title
                                                                    message:prompt
                                                             preferredStyle:UIAlertControllerStyleAlert];
-
+    
     UIAlertAction* ok = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK")
                                                  style:UIAlertActionStyleDefault
                                                handler:^(UIAlertAction* action)
-        {
-            completionHandler(((UITextField*)alert.textFields[0]).text);
-            [alert dismissViewControllerAnimated:YES completion:nil];
-        }];
-
+                         {
+        completionHandler(((UITextField*)alert.textFields[0]).text);
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
     [alert addAction:ok];
-
+    
     UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel")
                                                      style:UIAlertActionStyleDefault
                                                    handler:^(UIAlertAction* action)
-        {
-            completionHandler(nil);
-            [alert dismissViewControllerAnimated:YES completion:nil];
-        }];
+                             {
+        completionHandler(nil);
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
     [alert addAction:cancel];
-
+    
     [alert addTextFieldWithConfigurationHandler:^(UITextField* textField) {
         textField.text = defaultText;
     }];
-
+    
     [[self getViewController] presentViewController:alert animated:YES completion:nil];
 }
 

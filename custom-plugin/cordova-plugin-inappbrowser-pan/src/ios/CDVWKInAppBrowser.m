@@ -20,9 +20,9 @@
 #import "CDVWKInAppBrowser.h"
 
 #if __has_include(<Cordova/CDVWebViewProcessPoolFactory.h>) // Cordova-iOS >=6
-  #import <Cordova/CDVWebViewProcessPoolFactory.h>
+#import <Cordova/CDVWebViewProcessPoolFactory.h>
 #elif __has_include("CDVWKProcessPoolFactory.h") // Cordova-iOS <6 with WKWebView plugin
-  #import "CDVWKProcessPoolFactory.h"
+#import "CDVWKProcessPoolFactory.h"
 #endif
 
 #import <Cordova/CDVPluginResult.h>
@@ -36,7 +36,7 @@
 
 #define    IAB_BRIDGE_NAME @"cordova_iab"
 
-#define    TOOLBAR_HEIGHT 44.0
+#define    TOOLBAR_HEIGHT 50.0
 #define    LOCATIONBAR_HEIGHT 21.0
 #define    FOOTER_HEIGHT ((TOOLBAR_HEIGHT) + (LOCATIONBAR_HEIGHT))
 
@@ -145,7 +145,7 @@ static CDVWKInAppBrowser* instance = nil;
             isAtLeastiOS11 = true;
         }
 #endif
-            
+        
         if(isAtLeastiOS11){
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
             // Deletes all cookies
@@ -161,16 +161,16 @@ static CDVWKInAppBrowser* instance = nil;
             // https://stackoverflow.com/a/31803708/777265
             // Only deletes domain cookies (not session cookies)
             [dataStore fetchDataRecordsOfTypes:[WKWebsiteDataStore allWebsiteDataTypes]
-             completionHandler:^(NSArray<WKWebsiteDataRecord *> * __nonnull records) {
-                 for (WKWebsiteDataRecord *record  in records){
-                     NSSet<NSString*>* dataTypes = record.dataTypes;
-                     if([dataTypes containsObject:WKWebsiteDataTypeCookies]){
-                         [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:record.dataTypes
-                               forDataRecords:@[record]
-                               completionHandler:^{}];
-                     }
-                 }
-             }];
+                             completionHandler:^(NSArray<WKWebsiteDataRecord *> * __nonnull records) {
+                for (WKWebsiteDataRecord *record  in records){
+                    NSSet<NSString*>* dataTypes = record.dataTypes;
+                    if([dataTypes containsObject:WKWebsiteDataTypeCookies]){
+                        [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:record.dataTypes
+                                                                  forDataRecords:@[record]
+                                                               completionHandler:^{}];
+                    }
+                }
+            }];
         }
     }
     
@@ -198,7 +198,7 @@ static CDVWKInAppBrowser* instance = nil;
             NSLog(@"clearsessioncache not available below iOS 11.0");
         }
     }
-
+    
     if (self.inAppBrowserViewController == nil) {
         self.inAppBrowserViewController = [[CDVWKInAppBrowserViewController alloc] initWithBrowserOptions: browserOptions andSettings:self.commandDelegate.settings];
         self.inAppBrowserViewController.navigationDelegate = self;
@@ -207,9 +207,8 @@ static CDVWKInAppBrowser* instance = nil;
             self.inAppBrowserViewController.orientationDelegate = (UIViewController <CDVScreenOrientationDelegate>*)self.viewController;
         }
     }
-    
-    [self.inAppBrowserViewController showLocationBar:browserOptions.location];
-    [self.inAppBrowserViewController showToolBar:browserOptions.toolbar :browserOptions.toolbarposition];
+    // [self.inAppBrowserViewController showLocationBar:browserOptions.location];
+    //  [self.inAppBrowserViewController showToolBar:browserOptions.toolbar :browserOptions.toolbarposition];
     if (browserOptions.closebuttoncaption != nil || browserOptions.closebuttoncolor != nil) {
         int closeButtonIndex = browserOptions.lefttoright ? (browserOptions.hidenavigationbuttons ? 1 : 4) : 0;
         [self.inAppBrowserViewController setCloseButtonTitle:browserOptions.closebuttoncaption :browserOptions.closebuttoncolor :closeButtonIndex];
@@ -290,7 +289,7 @@ static CDVWKInAppBrowser* instance = nil;
     __block CDVInAppBrowserNavigationController* nav = [[CDVInAppBrowserNavigationController alloc]
                                                         initWithRootViewController:self.inAppBrowserViewController];
     nav.orientationDelegate = self.inAppBrowserViewController;
-    nav.navigationBarHidden = YES;
+    [nav setNavigationBarHidden:YES];
     nav.modalPresentationStyle = self.inAppBrowserViewController.modalPresentationStyle;
     nav.presentationController.delegate = self.inAppBrowserViewController;
     
@@ -304,14 +303,14 @@ static CDVWKInAppBrowser* instance = nil;
             if (!strongSelf->tmpWindow) {
                 CGRect frame = [[UIScreen mainScreen] bounds];
                 if(initHidden && osVersion < 11){
-                   frame.origin.x = -10000;
+                    frame.origin.x = -10000;
                 }
                 strongSelf->tmpWindow = [[UIWindow alloc] initWithFrame:frame];
             }
             UIViewController *tmpController = [[UIViewController alloc] init];
             [strongSelf->tmpWindow setRootViewController:tmpController];
             [strongSelf->tmpWindow setWindowLevel:UIWindowLevelNormal];
-
+            
             if(!initHidden || osVersion < 11){
                 [self->tmpWindow makeKeyAndVisible];
             }
@@ -326,7 +325,7 @@ static CDVWKInAppBrowser* instance = nil;
     // https://stackoverflow.com/questions/4544489/how-to-remove-a-uiwindow
     self->tmpWindow.hidden = YES;
     self->tmpWindow = nil;
-
+    
     if (self.inAppBrowserViewController == nil) {
         NSLog(@"Tried to hide IAB after it was closed.");
         return;
@@ -368,7 +367,7 @@ static CDVWKInAppBrowser* instance = nil;
 - (void)loadAfterBeforeload:(CDVInvokedUrlCommand*)command
 {
     NSString* urlStr = [command argumentAtIndex:0];
-
+    
     if ([_beforeload isEqualToString:@""]) {
         NSLog(@"unexpected loadAfterBeforeload called without feature beforeload=get|post");
     }
@@ -380,7 +379,7 @@ static CDVWKInAppBrowser* instance = nil;
         NSLog(@"loadAfterBeforeload called with nil argument, ignoring.");
         return;
     }
-
+    
     NSURL* url = [NSURL URLWithString:urlStr];
     //_beforeload = @"";
     _waitForBeforeload = NO;
@@ -512,14 +511,14 @@ static CDVWKInAppBrowser* instance = nil;
         errorMessage = @"beforeload doesn't yet support POST requests";
     }
     else if(isTopLevelNavigation && (
-           [_beforeload isEqualToString:@"yes"]
-       || ([_beforeload isEqualToString:@"get"] && [httpMethod isEqualToString:@"GET"])
-    // TODO comment in when POST requests are handled
-    // || ([_beforeload isEqualToString:@"post"] && [httpMethod isEqualToString:@"POST"])
-    )){
+                                     [_beforeload isEqualToString:@"yes"]
+                                     || ([_beforeload isEqualToString:@"get"] && [httpMethod isEqualToString:@"GET"])
+                                     // TODO comment in when POST requests are handled
+                                     // || ([_beforeload isEqualToString:@"post"] && [httpMethod isEqualToString:@"POST"])
+                                     )){
         useBeforeLoad = YES;
     }
-
+    
     // When beforeload, on first URL change, initiate JS callback. Only after the beforeload event, continue.
     if (_waitForBeforeload && useBeforeLoad) {
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
@@ -553,7 +552,7 @@ static CDVWKInAppBrowser* instance = nil;
         
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
     }
-
+    
     if (useBeforeLoad) {
         _waitForBeforeload = YES;
     }
@@ -613,7 +612,7 @@ static CDVWKInAppBrowser* instance = nil;
 - (void)didStartProvisionalNavigation:(WKWebView*)theWebView
 {
     NSLog(@"didStartProvisionalNavigation");
-//    self.inAppBrowserViewController.currentURL = theWebView.URL;
+    //    self.inAppBrowserViewController.currentURL = theWebView.URL;
 }
 
 - (void)didFinishNavigation:(WKWebView*)theWebView
@@ -654,6 +653,23 @@ static CDVWKInAppBrowser* instance = nil;
     }
 }
 
+- (void)help
+{
+    NSLog(@"help function called ===============");
+    if (self.callbackId != nil) {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                      messageAsDictionary:@{@"type":@"helpclick"}];
+        
+        [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
+        
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+        
+    }
+    [self.inAppBrowserViewController.configuration.userContentController removeScriptMessageHandlerForName:IAB_BRIDGE_NAME];
+    self.inAppBrowserViewController.configuration = nil;
+    
+}
+
 - (void)browserExit
 {
     if (self.callbackId != nil) {
@@ -675,12 +691,12 @@ static CDVWKInAppBrowser* instance = nil;
     // Set navigationDelegate to nil to ensure no callbacks are received from it.
     self.inAppBrowserViewController.navigationDelegate = nil;
     self.inAppBrowserViewController = nil;
-
+    
     // Set tmpWindow to hidden to make main webview responsive to touch again
     // Based on https://stackoverflow.com/questions/4544489/how-to-remove-a-uiwindow
     self->tmpWindow.hidden = YES;
     self->tmpWindow = nil;
-
+    
     if (IsAtLeastiOSVersion(@"7.0")) {
         if (_previousStatusBarStyle != -1) {
             [[UIApplication sharedApplication] setStatusBarStyle:_previousStatusBarStyle];
@@ -701,6 +717,7 @@ static CDVWKInAppBrowser* instance = nil;
 
 CGFloat lastReducedStatusBarHeight = 0.0;
 BOOL isExiting = FALSE;
+BOOL isHelpClick = FALSE;
 
 - (id)initWithBrowserOptions: (CDVInAppBrowserOptions*) browserOptions andSettings:(NSDictionary *)settings
 {
@@ -708,10 +725,14 @@ BOOL isExiting = FALSE;
     if (self != nil) {
         _browserOptions = browserOptions;
         _settings = settings;
+        
+        
         self.webViewUIDelegate = [[CDVWKInAppBrowserUIDelegate alloc] initWithTitle:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"]];
         [self.webViewUIDelegate setViewController:self];
         
+        [self setCustomNavigationBar];
         [self createViews];
+        [self setCustomBottomView];
     }
     
     return self;
@@ -771,7 +792,7 @@ BOOL isExiting = FALSE;
         
     }
     
-
+    
     self.webView = [[WKWebView alloc] initWithFrame:webViewBounds configuration:configuration];
     
     [self.view addSubview:self.webView];
@@ -797,9 +818,9 @@ BOOL isExiting = FALSE;
     self.webView.allowsBackForwardNavigationGestures = NO;
     
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
-   if (@available(iOS 11.0, *)) {
-       [self.webView.scrollView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
-   }
+    if (@available(iOS 11.0, *)) {
+        [self.webView.scrollView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
+    }
 #endif
     
     self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -841,60 +862,60 @@ BOOL isExiting = FALSE;
     self.toolbar.opaque = NO;
     self.toolbar.userInteractionEnabled = YES;
     if (_browserOptions.toolbarcolor != nil) { // Set toolbar color if user sets it in options
-      self.toolbar.barTintColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+        self.toolbar.barTintColor = [self colorFromHexString:_browserOptions.toolbarcolor];
     }
     if (!_browserOptions.toolbartranslucent) { // Set toolbar translucent to no if user sets it in options
-      self.toolbar.translucent = NO;
+        self.toolbar.translucent = NO;
     }
     
     CGFloat labelInset = 5.0;
     float locationBarY = toolbarIsAtBottom ? self.view.bounds.size.height - FOOTER_HEIGHT : self.view.bounds.size.height - LOCATIONBAR_HEIGHT;
     
-    self.addressLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelInset, locationBarY, self.view.bounds.size.width - labelInset, LOCATIONBAR_HEIGHT)];
-    self.addressLabel.adjustsFontSizeToFitWidth = NO;
-    self.addressLabel.alpha = 1.000;
-    self.addressLabel.autoresizesSubviews = YES;
-    self.addressLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-    self.addressLabel.backgroundColor = [UIColor clearColor];
-    self.addressLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-    self.addressLabel.clearsContextBeforeDrawing = YES;
-    self.addressLabel.clipsToBounds = YES;
-    self.addressLabel.contentMode = UIViewContentModeScaleToFill;
-    self.addressLabel.enabled = YES;
-    self.addressLabel.hidden = NO;
-    self.addressLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-    
-    if ([self.addressLabel respondsToSelector:NSSelectorFromString(@"setMinimumScaleFactor:")]) {
-        [self.addressLabel setValue:@(10.0/[UIFont labelFontSize]) forKey:@"minimumScaleFactor"];
-    } else if ([self.addressLabel respondsToSelector:NSSelectorFromString(@"setMinimumFontSize:")]) {
-        [self.addressLabel setValue:@(10.0) forKey:@"minimumFontSize"];
-    }
-    
-    self.addressLabel.multipleTouchEnabled = NO;
-    self.addressLabel.numberOfLines = 1;
-    self.addressLabel.opaque = NO;
-    self.addressLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-    self.addressLabel.text = NSLocalizedString(@"Loading...", nil);
-    self.addressLabel.textAlignment = NSTextAlignmentLeft;
-    self.addressLabel.textColor = [UIColor colorWithWhite:1.000 alpha:1.000];
-    self.addressLabel.userInteractionEnabled = NO;
-    
+    //    self.addressLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelInset, locationBarY, self.view.bounds.size.width - labelInset, LOCATIONBAR_HEIGHT)];
+    //    self.addressLabel.adjustsFontSizeToFitWidth = NO;
+    //    self.addressLabel.alpha = 1.000;
+    //    self.addressLabel.autoresizesSubviews = YES;
+    //    self.addressLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+    //    self.addressLabel.backgroundColor = [UIColor blackColor];
+    //    self.addressLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+    //    self.addressLabel.clearsContextBeforeDrawing = YES;
+    //    self.addressLabel.clipsToBounds = YES;
+    //    self.addressLabel.contentMode = UIViewContentModeScaleToFill;
+    //    self.addressLabel.enabled = YES;
+    //    self.addressLabel.hidden = NO;
+    //    self.addressLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    //
+    //    if ([self.addressLabel respondsToSelector:NSSelectorFromString(@"setMinimumScaleFactor:")]) {
+    //        [self.addressLabel setValue:@(10.0/[UIFont labelFontSize]) forKey:@"minimumScaleFactor"];
+    //    } else if ([self.addressLabel respondsToSelector:NSSelectorFromString(@"setMinimumFontSize:")]) {
+    //        [self.addressLabel setValue:@(10.0) forKey:@"minimumFontSize"];
+    //    }
+    //
+    //    self.addressLabel.multipleTouchEnabled = NO;
+    //    self.addressLabel.numberOfLines = 1;
+    //    self.addressLabel.opaque = NO;
+    //    self.addressLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+    //    self.addressLabel.text = NSLocalizedString(@"Loading...", nil);
+    //    self.addressLabel.textAlignment = NSTextAlignmentLeft;
+    //    self.addressLabel.textColor = [UIColor colorWithWhite:1.000 alpha:1.000];
+    //    self.addressLabel.userInteractionEnabled = NO;
+    //
     NSString* frontArrowString = NSLocalizedString(@"►", nil); // create arrow from Unicode char
     self.forwardButton = [[UIBarButtonItem alloc] initWithTitle:frontArrowString style:UIBarButtonItemStylePlain target:self action:@selector(goForward:)];
     self.forwardButton.enabled = YES;
     self.forwardButton.imageInsets = UIEdgeInsetsZero;
     if (_browserOptions.navigationbuttoncolor != nil) { // Set button color if user sets it in options
-      self.forwardButton.tintColor = [self colorFromHexString:_browserOptions.navigationbuttoncolor];
+        self.forwardButton.tintColor = [self colorFromHexString:_browserOptions.navigationbuttoncolor];
     }
-
+    
     NSString* backArrowString = NSLocalizedString(@"◄", nil); // create arrow from Unicode char
     self.backButton = [[UIBarButtonItem alloc] initWithTitle:backArrowString style:UIBarButtonItemStylePlain target:self action:@selector(goBack:)];
     self.backButton.enabled = YES;
     self.backButton.imageInsets = UIEdgeInsetsZero;
     if (_browserOptions.navigationbuttoncolor != nil) { // Set button color if user sets it in options
-      self.backButton.tintColor = [self colorFromHexString:_browserOptions.navigationbuttoncolor];
+        self.backButton.tintColor = [self colorFromHexString:_browserOptions.navigationbuttoncolor];
     }
-
+    
     // Filter out Navigation Buttons if user requests so
     if (_browserOptions.hidenavigationbuttons) {
         if (_browserOptions.lefttoright) {
@@ -909,9 +930,120 @@ BOOL isExiting = FALSE;
     }
     
     self.view.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.toolbar];
-    [self.view addSubview:self.addressLabel];
+    //[self.view addSubview:self.toolbar];
+    //[self.view addSubview:self.addressLabel];
     [self.view addSubview:self.spinner];
+}
+
+
+- (void)setCustomNavigationBar
+{
+    self.navView = [[UIView alloc] initWithFrame:CGRectMake(0, [self getStatusBarOffset], self.view.bounds.size.width, 50)];
+    self.lockIcon = [[UIImageView alloc] init];
+    self.addressLabel = [[UILabel alloc] init];
+    self.helpButton = [[UIButton alloc] init];
+    self.closeButton = [[UIButton alloc] init];
+    
+    self.addressLabel.text = @"Loading...";
+    self.addressLabel.adjustsFontSizeToFitWidth = NO;
+    self.addressLabel.alpha = 1.000;
+    self.addressLabel.autoresizesSubviews = YES;
+    self.addressLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+    self.addressLabel.hidden = NO;
+    self.addressLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+    self.addressLabel.clearsContextBeforeDrawing = YES;
+    self.addressLabel.clipsToBounds = YES;
+    self.addressLabel.contentMode = UIViewContentModeScaleToFill;
+    self.addressLabel.enabled = YES;
+    self.addressLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    self.addressLabel.font = [UIFont fontWithName:_browserOptions.ioslocationfontfamily size:15];
+    //    if ([self.addressLabel respondsToSelector:NSSelectorFromString(@"setMinimumScaleFactor:")]) {
+    //        [self.addressLabel setValue:@(10.0/[UIFont labelFontSize]) forKey:@"minimumScaleFactor"];
+    //    } else if ([self.addressLabel respondsToSelector:NSSelectorFromString(@"setMinimumFontSize:")]) {
+    //        [self.addressLabel setValue:@(10.0) forKey:@"minimumFontSize"];
+    //    }
+    
+    self.addressLabel.multipleTouchEnabled = NO;
+    self.addressLabel.numberOfLines = 1;
+    self.addressLabel.opaque = NO;
+    self.addressLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+    self.addressLabel.backgroundColor = UIColor.clearColor;
+    [self.addressLabel setTextColor:UIColor.whiteColor];
+    [self.addressLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.lockIcon setImage:[UIImage imageNamed:@"lockicon"]];
+    [self.lockIcon setContentMode:UIViewContentModeScaleAspectFit];
+    
+    [self.helpButton setTitle:_browserOptions.helpbuttontext forState:UIControlStateNormal];
+    [self.helpButton setTitleColor:[self colorFromHexString:_browserOptions.helpbuttoncolor] forState:UIControlStateNormal];
+    self.helpButton.titleLabel.font = [UIFont fontWithName:_browserOptions.ioshelpfontfamily size:15];
+    [self.helpButton addTarget:self action:@selector(helpBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.closeButton setTitle:_browserOptions.closebuttoncaption forState:UIControlStateNormal];
+    [self.closeButton setTitleColor:[self colorFromHexString:_browserOptions.closebuttoncolor] forState:UIControlStateNormal];
+    
+//    for (NSString *familyName in [UIFont familyNames]) {
+//           for (NSString *fontName in [UIFont fontNamesForFamilyName:familyName]) {
+//               NSLog(@"%@", fontName);
+//           }
+//       }
+    
+    self.closeButton.titleLabel.font = [UIFont fontWithName:_browserOptions.iosclosebuttonfontfamily size:15];
+    self.closeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    [self.closeButton addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+    
+    CGFloat lblY = (self.navView.frame.size.height - self.addressLabel.intrinsicContentSize.height)/2;
+    CGFloat lblX = ((self.navView.frame.size.width/2)-(self.addressLabel.intrinsicContentSize.width/2));
+    self.helpButton.frame = CGRectMake(5, 10, 50, 30);
+    self.addressLabel.frame = CGRectMake(lblX, lblY, self.addressLabel.intrinsicContentSize.width, self.addressLabel.intrinsicContentSize.height);
+    [self.addressLabel sizeToFit];
+    //[titleLbl setCenter:CGPointMake(titleViewCustom.frame.size.width/2, titleViewCustom.frame.size.width/2)];
+    self.lockIcon.frame = CGRectMake(lblX-28, 16, 18, 18);
+    self.closeButton.frame = CGRectMake(self.navView.frame.size.width-100, 10, 90, 30);
+    
+    [self.navView setBackgroundColor: [self colorFromHexString:_browserOptions.toolbarcolor]];
+    if (![_browserOptions.helpbuttontext  isEqual: @""]  && _browserOptions.helpbuttontext != nil) {
+        [self.navView addSubview:self.helpButton];
+    }
+    [self.navView addSubview:self.closeButton];
+    [self.navView addSubview: self.addressLabel];
+    [self.navView addSubview:self.lockIcon];
+    [self.view addSubview:self.navView];
+}
+
+- (void) setCustomBottomView
+{
+    self.bottomView = [[UIView alloc] init];
+    UIImageView *footerImageIcon = [[UIImageView alloc] init];
+    UILabel *footerTextLbl = [[UILabel alloc] init];
+    
+    footerTextLbl.text = _browserOptions.footertext;
+    footerTextLbl.backgroundColor = UIColor.clearColor;
+    [footerTextLbl setFont: [UIFont fontWithName:_browserOptions.iosfooterfontfamily size:15]];
+    [footerTextLbl setTextColor:[self colorFromHexString:_browserOptions.footertextcolor]];
+    [footerTextLbl setTextAlignment:NSTextAlignmentLeft];
+    footerTextLbl.numberOfLines = 0;
+    [footerImageIcon setImage:[UIImage imageNamed:_browserOptions.footerimage]];
+    [footerImageIcon setContentMode:UIViewContentModeScaleAspectFit];
+    
+    self.bottomView.layer.cornerRadius = 5;
+    //    self.bottomView.layer.borderWidth = 1;
+    //    self.bottomView.layer.borderColor = UIColor.grayColor.CGColor;
+    self.bottomView.backgroundColor = UIColor.whiteColor;
+    self.bottomView.layer.shadowColor = UIColor.blackColor.CGColor;
+    self.bottomView.layer.shadowOffset = CGSizeMake(0, 1);;
+    self.bottomView.layer.shadowOpacity = 1;
+    self.bottomView.layer.shadowRadius = 5;
+    
+    footerImageIcon.frame = CGRectMake(20, 20, 50, 60);
+    footerTextLbl.frame = CGRectMake(80, 27, self.view.frame.size.width-120, footerTextLbl.intrinsicContentSize.height);
+    [footerTextLbl sizeToFit];
+    
+    [self.bottomView addSubview:footerImageIcon];
+    [self.bottomView addSubview:footerTextLbl];
+    
+    self.bottomView.frame = CGRectMake(0, self.view.frame.size.height-110, self.view.frame.size.width, 110);
+    
+    [self.view addSubview:self.bottomView];
 }
 
 - (id)settingForKey:(NSString*)key
@@ -1066,6 +1198,15 @@ BOOL isExiting = FALSE;
     }
 }
 
+-(void) viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    if (isHelpClick) {
+        [self.navigationDelegate help];
+        isHelpClick = FALSE;
+    }
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     NSString* statusBarStylePreference = [self settingForKey:@"InAppBrowserStatusBarStyle"];
@@ -1104,6 +1245,90 @@ BOOL isExiting = FALSE;
     });
 }
 
+- (void)helpBtnClick
+{
+    NSLog(@"helpbutton clicked====================");
+    
+    
+    __weak UIViewController* weakSelf = self;
+    //    isHelpClick = TRUE;
+    //    [weakSelf viewDidLayoutSubviews];
+    
+    //    [_webViewUIDelegate webView:self.webView runJavaScriptAlertPanelWithMessage:@{@"type":@"helpclick"} initiatedByFrame:self.webView.observationInfo completionHandler:^{
+    //        NSLog(@"sfsfsfsf");
+    //    }];
+    if ([weakSelf respondsToSelector:@selector(presentingViewController)]) {
+        [[weakSelf presentationController] containerViewDidLayoutSubviews];
+        
+        if (![_browserOptions.helppopuptext  isEqual: @""] && _browserOptions.helppopuptext != nil){
+            
+            if ([_helpButtonState isEqualToString:@"Selected"]) {
+                _helpButtonState = @"Select";
+            }else{
+                [self.helpButton setEnabled:false];
+                _helpButtonState = @"Selected";
+                [self helpBtnPopUp];
+            }
+        }
+        
+    }
+}
+
+- (void)helpBtnPopUp
+{
+    self.helpButtonPopUpView = [[UIView alloc] init];
+    UIButton *closeButton = [[UIButton alloc] init];
+    UILabel *popTextLbl = [[UILabel alloc] init];
+    
+    popTextLbl.text = _browserOptions.helppopuptext;
+    popTextLbl.backgroundColor = UIColor.clearColor;
+    [popTextLbl setFont: [UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
+    [popTextLbl setTextColor: [self colorFromHexString:_browserOptions.footertextcolor]];
+    [popTextLbl setTextAlignment:NSTextAlignmentLeft];
+    popTextLbl.numberOfLines = 0;
+    
+    [closeButton setImage:[UIImage imageNamed:@"closeIcon"] forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(closeBtnForPopUpView) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    self.helpButtonPopUpView.layer.cornerRadius = 5;
+    self.helpButtonPopUpView.backgroundColor = UIColor.whiteColor;
+    
+    self.helpButtonPopUpView.layer.shadowColor = UIColor.blackColor.CGColor;
+    self.helpButtonPopUpView.layer.shadowOffset = CGSizeMake(0, 1);;
+    self.helpButtonPopUpView.layer.shadowOpacity = 1;
+    self.helpButtonPopUpView.layer.shadowRadius = 10;
+    
+    CGFloat viewWidth = self.view.frame.size.width-30;
+    
+    popTextLbl.frame = CGRectMake(20, 15, viewWidth - 60, popTextLbl.intrinsicContentSize.height);
+    [popTextLbl sizeToFit];
+    
+    CGFloat viewHeight = (popTextLbl.frame.size.height + 30);
+    
+    closeButton.frame = CGRectMake(viewWidth-35, (viewHeight/2)-12, 25, 25);
+    
+    [self.helpButtonPopUpView addSubview:popTextLbl];
+    [self.helpButtonPopUpView addSubview:closeButton];
+    
+    CGFloat viewY = (self.view.frame.size.height/2) - (viewHeight/2);
+    
+    self.helpButtonPopUpView.frame = CGRectMake(15, viewY, viewWidth, (popTextLbl.frame.size.height + 30));
+    
+    
+    [self.view addSubview:self.helpButtonPopUpView];
+    
+    
+}
+
+- (void)closeBtnForPopUpView
+{
+    [self.helpButton setEnabled:true];
+    _helpButtonState = @"Select";
+    [_helpButtonPopUpView removeFromSuperview];
+    
+}
+
 - (void)navigateTo:(NSURL*)url
 {
     if ([url.scheme isEqualToString:@"file"]) {
@@ -1137,10 +1362,11 @@ BOOL isExiting = FALSE;
 // change that value.
 //
 - (float) getStatusBarOffset {
-    return (float) IsAtLeastiOSVersion(@"7.0") ? [[UIApplication sharedApplication] statusBarFrame].size.height : 0.0;
+    return (float) ([UIApplication sharedApplication].statusBarFrame.size.height);
 }
 
 - (void) rePositionViews {
+    [self.navigationController setNavigationBarHidden:YES];
     CGRect viewBounds = [self.webView bounds];
     CGFloat statusBarHeight = [self getStatusBarOffset];
     
@@ -1207,8 +1433,26 @@ BOOL isExiting = FALSE;
 - (void)webView:(WKWebView *)theWebView didFinishNavigation:(WKNavigation *)navigation
 {
     // update url, stop spinner, update back/forward
+    NSString* urlString = [self.currentURL absoluteString];
+    NSURL* url = [NSURL URLWithString:urlString];
+    NSString* domain = [url host];
+    NSString* protocol = [url scheme];
+    self.addressLabel.text = domain;
     
-    self.addressLabel.text = [self.currentURL absoluteString];
+    if ([protocol isEqual:@"http"]) {
+        self.lockIcon.hidden = YES;
+    }else{
+        self.lockIcon.hidden = NO;
+    }
+    CGRect lblFrame = self.addressLabel.frame;
+    CGRect iconFrame = self.lockIcon.frame;
+    CGFloat lblX = ((self.navView.frame.size.width/2)-(self.addressLabel.intrinsicContentSize.width/2));
+    iconFrame.origin.x = lblX-28;
+    lblFrame.size.width = self.addressLabel.intrinsicContentSize.width;
+    lblFrame.origin.x = lblX;
+    self.addressLabel.frame = lblFrame;
+    self.lockIcon.frame = iconFrame;
+    
     self.backButton.enabled = theWebView.canGoBack;
     self.forwardButton.enabled = theWebView.canGoForward;
     theWebView.scrollView.contentInset = UIEdgeInsetsZero;
@@ -1217,7 +1461,7 @@ BOOL isExiting = FALSE;
     
     [self.navigationDelegate didFinishNavigation:theWebView];
 }
-    
+
 - (void)webView:(WKWebView*)theWebView failedNavigation:(NSString*) delegateName withError:(nonnull NSError *)error{
     // log fail message, stop spinner, update back/forward
     NSLog(@"webView:%@ - %ld: %@", delegateName, (long)error.code, [error localizedDescription]);
@@ -1235,11 +1479,12 @@ BOOL isExiting = FALSE;
 {
     [self webView:theWebView failedNavigation:@"didFailNavigation" withError:error];
 }
-    
+
 - (void)webView:(WKWebView*)theWebView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(nonnull NSError *)error
 {
     [self webView:theWebView failedNavigation:@"didFailProvisionalNavigation" withError:error];
 }
+
 
 #pragma mark WKScriptMessageHandler delegate
 - (void)userContentController:(nonnull WKUserContentController *)userContentController didReceiveScriptMessage:(nonnull WKScriptMessage *)message {
@@ -1272,13 +1517,13 @@ BOOL isExiting = FALSE;
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context)
-    {
+     {
         [self rePositionViews];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context)
-    {
-
+     {
+        
     }];
-
+    
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 

@@ -26,6 +26,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Parcelable;
 import android.provider.Browser;
 import android.content.res.Resources;
@@ -62,6 +63,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -89,8 +91,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
 import java.util.StringTokenizer;
-
-import io.ionic.starter.R;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class InAppBrowser extends CordovaPlugin {
@@ -134,12 +134,13 @@ public class InAppBrowser extends CordovaPlugin {
     private static final String HELP_BUTTON_TEXT = "helpButtonText";
     private static final String HELP_BUTTON_COLOR = "helpButtonColor";
     private static final String HELP_BUTTON_FONT_FAMILY = "helpFontFamily";
+    private static final String HELP_POPUP_TEXT = "helpPopUpText";
     private static final String FOOTER_TEXT_COLOR = "footerTextColor";
     private static final String FOOTER_FONT_FAMILY = "footerFontFamily";
     private static final String FOOTER_TEXT = "footerText";
     private static final String FOOTER_IMAGE = "footerImage";
 
-    private static final List customizableOptions = Arrays.asList(CLOSE_BUTTON_CAPTION, TOOLBAR_COLOR, NAVIGATION_COLOR, CLOSE_BUTTON_COLOR,CLOSE_BUTTON_FONT_FAMILY, FOOTER_COLOR, LOCATION_BAR_TEXT_COLOR, HELP_BUTTON_TEXT, HELP_BUTTON_COLOR, FOOTER_TEXT_COLOR, FOOTER_TEXT, FOOTER_FONT_FAMILY, HELP_BUTTON_FONT_FAMILY, LOCATION_BAR_FONT_FAMILY,FOOTER_IMAGE);
+    private static final List customizableOptions = Arrays.asList(CLOSE_BUTTON_CAPTION, TOOLBAR_COLOR, NAVIGATION_COLOR, CLOSE_BUTTON_COLOR,CLOSE_BUTTON_FONT_FAMILY, FOOTER_COLOR, LOCATION_BAR_TEXT_COLOR, HELP_BUTTON_COLOR, FOOTER_TEXT_COLOR, FOOTER_TEXT, FOOTER_FONT_FAMILY,HELP_BUTTON_TEXT, HELP_BUTTON_FONT_FAMILY, LOCATION_BAR_FONT_FAMILY,FOOTER_IMAGE, HELP_POPUP_TEXT);
 
     private InAppBrowserDialog dialog;
     private WebView inAppWebView;
@@ -171,6 +172,8 @@ public class InAppBrowser extends CordovaPlugin {
     private String[] allowedSchemes;
     private InAppBrowserClient currentClient;
     private HashMap<String, String> features;
+    private LinearLayout main;
+    private PopupWindow popupWindow;
 
     /**
      * Executes the request and returns PluginResult.
@@ -459,11 +462,13 @@ public class InAppBrowser extends CordovaPlugin {
                 option = new StringTokenizer(features.nextToken(), "=");
                 if (option.hasMoreElements()) {
                     String key = option.nextToken();
-                    String value = option.nextToken();
+                    String value =option.hasMoreTokens()? option.nextToken(): null;
                     if (!customizableOptions.contains(key)) {
                         value = value.equals("yes") || value.equals("no") ? value : "yes";
                     }
-                    map.put(key, value);
+                    if(value != null) {
+                      map.put(key, value);
+                    }
                 }
             }
 
@@ -587,23 +592,14 @@ public class InAppBrowser extends CordovaPlugin {
       @Override
       public void run() {
         final WebView childView = inAppWebView;
-        // The JS protects against multiple calls, so this should happen only when
-        // closeDialog() is called by other native code.
         if (childView == null) {
           return;
         }
+          if(features.get(HELP_POPUP_TEXT) != null) {
+            popupWindow = new PopupWindow(createHelpPopup(), LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            popupWindow.showAtLocation(main, Gravity.CENTER, 0, 0);
+          }
 
-
-        // NB: From SDK 19: "If you call methods on WebView from any thread
-        // other than your app's UI thread, it can cause unexpected results."
-        // http://developer.android.com/guide/webapps/migrating.html#Threads
-        try {
-          JSONObject obj = new JSONObject();
-          obj.put("type", HELP_CLICK_EVENT);
-          sendUpdate(obj, true);
-        } catch (JSONException ex) {
-          LOG.d(LOG_TAG, "Should never happen");
-        }
       }
     });
   }
@@ -855,7 +851,7 @@ public class InAppBrowser extends CordovaPlugin {
                 };
 
                 // Let's create the main dialog
-                dialog = new InAppBrowserDialog(cordova.getActivity(), R.style.Theme_Transparent);
+                dialog = new InAppBrowserDialog(cordova.getActivity(), android.R.style.Theme_NoTitleBar);
 
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.getWindow().getAttributes().windowAnimations = android.R.style.Animation_Dialog;
@@ -868,7 +864,7 @@ public class InAppBrowser extends CordovaPlugin {
 //                dialog.setMargins(0,20,0,0);
 
                 // Main container layout
-                LinearLayout main = new LinearLayout(cordova.getActivity());
+                main = new LinearLayout(cordova.getActivity());
                 //Add top padding
 //                LinearLayout.LayoutParams mainLayoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
                 main.setPadding(0,this.dpToPixels(30),0,0);
@@ -1002,11 +998,11 @@ public class InAppBrowser extends CordovaPlugin {
 //              } else {
 //                _footerColor = android.graphics.Color.LTGRAY;
 //              }
-//              footer.setBackgroundColor(_footerColor);
+              footer.setBackgroundColor(Color.TRANSPARENT);
               RelativeLayout.LayoutParams footerLayout = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
               footerLayout.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
               footer.setLayoutParams(footerLayout);
-              if (closeButtonCaption != "") footer.setPadding(this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8));
+//              if (closeButtonCaption != "") footer.setPadding(this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8));
               footer.setHorizontalGravity(Gravity.LEFT);
               footer.setVerticalGravity(Gravity.BOTTOM);
 
@@ -1126,6 +1122,7 @@ public class InAppBrowser extends CordovaPlugin {
 
                 // Add our webview to our main view/layout
                 RelativeLayout webViewLayout = new RelativeLayout(cordova.getActivity());
+
                 webViewLayout.addView(inAppWebView);
                 main.addView(webViewLayout);
 
@@ -1143,6 +1140,7 @@ public class InAppBrowser extends CordovaPlugin {
                     dialog.setContentView(main);
                     dialog.show();
                     dialog.getWindow().setAttributes(lp);
+
                 }
                 // the goal of openhidden is to load the url and not display it
                 // Show() needs to be called to cause the URL to be loaded
@@ -1310,7 +1308,7 @@ public class InAppBrowser extends CordovaPlugin {
       e.printStackTrace();
     } finally {
       try {
-        inputStream.close();
+        if(inputStream != null)inputStream.close();
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -1324,11 +1322,13 @@ public class InAppBrowser extends CordovaPlugin {
     // Use TextView for text
     TextView help = new TextView(cordova.getActivity());
     help.setText("Help");
-    if(features.get(HELP_BUTTON_TEXT) != null)  help.setText(features.get(HELP_BUTTON_TEXT));
     help.setTextSize(16);
 
     Typeface typeface = getFontFromFromName(features.get(HELP_BUTTON_FONT_FAMILY));
     help.setTypeface(typeface);
+    if(features.get(HELP_BUTTON_TEXT) != null) {
+      help.setText(features.get(HELP_BUTTON_TEXT));
+    }
 
     if (features.get(HELP_BUTTON_COLOR) != null) {
       System.out.println(features.get(HELP_BUTTON_COLOR)+ " app color");
@@ -1355,8 +1355,92 @@ public class InAppBrowser extends CordovaPlugin {
         openHelp();
       }
     });
+    if(features.get(HELP_BUTTON_TEXT) == null) {
+     _help.setOnClickListener(null);
+     _help.setVisibility(View.INVISIBLE);
+    }
 
     return _help;
+  }
+
+  private View createHelpPopup(){
+    Resources activityRes = cordova.getActivity().getResources();
+
+    LinearLayout main = new LinearLayout(cordova.getActivity());
+    main.setOrientation(LinearLayout.VERTICAL);
+    main.setGravity(Gravity.CENTER);
+    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+    main.setPadding(this.dpToPixels(15), this.dpToPixels(20),this.dpToPixels(15), this.dpToPixels(20));
+    main.setLayoutParams(layoutParams);
+
+
+    //Popup layout
+    RelativeLayout popup = new RelativeLayout(cordova.getActivity());
+//    popup.setOrientation(LinearLayout.VERTICAL);
+    RelativeLayout.LayoutParams layoutParams1= new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
+    popup.setPadding(this.dpToPixels(0), this.dpToPixels(20),this.dpToPixels(10), this.dpToPixels(20));
+    popup.setLayoutParams(layoutParams1);
+    popup.setGravity(Gravity.CENTER);
+    popup.setId(Integer.valueOf(101));
+    popup.setElevation(24);
+    popup.setClipToOutline(false);
+    int shadowRes = activityRes.getIdentifier("shadow", "drawable", cordova.getActivity().getPackageName());
+    popup.setBackgroundResource(shadowRes);
+
+
+
+    //popup text
+    String  footerText = "";
+    int _footerTextColor;
+    if(features.get(HELP_POPUP_TEXT) != null) {
+      footerText = features.get(HELP_POPUP_TEXT);
+    }
+
+
+    _footerTextColor = android.graphics.Color.BLACK;
+
+    TextView  textView = new TextView(cordova.getContext());
+    textView.setText(footerText);
+    textView.setId(Integer.valueOf(102));
+    textView.setTextColor(_footerTextColor);
+    textView.setPadding(this.dpToPixels(10), this.dpToPixels(10),this.dpToPixels(40), this.dpToPixels(10));
+    textView.setTextSize(16);
+    textView.setGravity(Gravity.CENTER);
+    textView.setTypeface(null, Typeface.NORMAL);
+    textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+    RelativeLayout.LayoutParams textLayoutParams =  new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT , LayoutParams.WRAP_CONTENT);
+    textLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+    textLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+    textView.setLayoutParams(textLayoutParams);
+    popup.addView(textView);
+
+    //add close button
+    RelativeLayout.LayoutParams layoutParams2= new RelativeLayout.LayoutParams(100,LayoutParams.WRAP_CONTENT);
+    layoutParams2.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+    layoutParams2.addRule(RelativeLayout.CENTER_VERTICAL);
+    layoutParams2.setMarginEnd(10);
+//    closeLayout.setLayoutParams(layoutParams2);
+    ImageButton close = new ImageButton(cordova.getActivity());
+//    close.setPadding(this.dpToPixels(10), this.dpToPixels(10),this.dpToPixels(10), this.dpToPixels(10));
+    close.setId(Integer.valueOf(103));
+    int closeResId = activityRes.getIdentifier("ic_action_remove", "drawable", cordova.getActivity().getPackageName());
+    Drawable closeIcon = activityRes.getDrawable(closeResId);
+    close.setImageDrawable(closeIcon);
+    close.setLayoutParams(layoutParams2);
+    close.setBackgroundColor(Color.TRANSPARENT);
+    close.setScaleType(ImageView.ScaleType.FIT_CENTER);
+    close.getAdjustViewBounds();
+    close.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        popupWindow.dismiss();
+      }
+    });
+
+    popup.addView(close);
+
+    main.addView(popup);
+
+    return main;
   }
 
   private String getUrlForLocationBar(String url){

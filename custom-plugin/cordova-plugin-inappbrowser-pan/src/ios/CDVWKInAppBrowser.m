@@ -211,7 +211,14 @@ static CDVWKInAppBrowser* instance = nil;
     //  [self.inAppBrowserViewController showToolBar:browserOptions.toolbar :browserOptions.toolbarposition];
     if (browserOptions.closebuttoncaption != nil || browserOptions.closebuttoncolor != nil) {
         int closeButtonIndex = browserOptions.lefttoright ? (browserOptions.hidenavigationbuttons ? 1 : 4) : 0;
-        [self.inAppBrowserViewController setCloseButtonTitle:browserOptions.closebuttoncaption :browserOptions.closebuttoncolor :closeButtonIndex];
+        
+        if (browserOptions.closebuttoncolor == nil || [browserOptions.closebuttoncolor isEqual:@""]) {
+            [self.inAppBrowserViewController setCloseButtonTitle:browserOptions.closebuttoncaption :@"#000000" :closeButtonIndex];
+
+        }else{
+            [self.inAppBrowserViewController setCloseButtonTitle:browserOptions.closebuttoncaption :browserOptions.closebuttoncolor :closeButtonIndex];
+
+        }
     }
     // Set Presentation Style
     UIModalPresentationStyle presentationStyle = UIModalPresentationFullScreen; // default
@@ -861,8 +868,11 @@ BOOL isHelpClick = FALSE;
     self.toolbar.multipleTouchEnabled = NO;
     self.toolbar.opaque = NO;
     self.toolbar.userInteractionEnabled = YES;
-    if (_browserOptions.toolbarcolor != nil) { // Set toolbar color if user sets it in options
+    if (_browserOptions.toolbarcolor != nil && ![_browserOptions.toolbarcolor isEqual:@""]) { // Set toolbar color if user sets it in options
         self.toolbar.barTintColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+    }else{
+        self.toolbar.barTintColor = UIColor.blackColor;
+
     }
     if (!_browserOptions.toolbartranslucent) { // Set toolbar translucent to no if user sets it in options
         self.toolbar.translucent = NO;
@@ -974,12 +984,26 @@ BOOL isHelpClick = FALSE;
     [self.lockIcon setContentMode:UIViewContentModeScaleAspectFit];
     
     [self.helpButton setTitle:_browserOptions.helpbuttontext forState:UIControlStateNormal];
-    [self.helpButton setTitleColor:[self colorFromHexString:_browserOptions.helpbuttoncolor] forState:UIControlStateNormal];
+    
+    if (![_browserOptions.helpbuttoncolor  isEqual: @""]  && _browserOptions.helpbuttoncolor != nil) {
+        [self.helpButton setTitleColor:[self colorFromHexString:_browserOptions.helpbuttoncolor] forState:UIControlStateNormal];
+
+    }else{
+        [self.helpButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+
+    }
     self.helpButton.titleLabel.font = [UIFont fontWithName:_browserOptions.ioshelpfontfamily size:15];
     [self.helpButton addTarget:self action:@selector(helpBtnClick) forControlEvents:UIControlEventTouchUpInside];
     
     [self.closeButton setTitle:_browserOptions.closebuttoncaption forState:UIControlStateNormal];
-    [self.closeButton setTitleColor:[self colorFromHexString:_browserOptions.closebuttoncolor] forState:UIControlStateNormal];
+    
+    if (![_browserOptions.closebuttoncolor  isEqual: @""]  && _browserOptions.closebuttoncolor != nil) {
+        [self.closeButton setTitleColor:[self colorFromHexString:_browserOptions.closebuttoncolor] forState:UIControlStateNormal];
+
+    }else{
+        [self.closeButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+
+    }
     
 //    for (NSString *familyName in [UIFont familyNames]) {
 //           for (NSString *fontName in [UIFont fontNamesForFamilyName:familyName]) {
@@ -1000,11 +1024,20 @@ BOOL isHelpClick = FALSE;
     self.lockIcon.frame = CGRectMake(lblX-28, 16, 18, 18);
     self.closeButton.frame = CGRectMake(self.navView.frame.size.width-100, 10, 90, 30);
     
-    [self.navView setBackgroundColor: [self colorFromHexString:_browserOptions.toolbarcolor]];
+    if (_browserOptions.toolbarcolor != nil && ![_browserOptions.toolbarcolor isEqual:@""]) { // Set toolbar color if user sets it in options
+        [self.navView setBackgroundColor: [self colorFromHexString:_browserOptions.toolbarcolor]];
+    }else{
+        [self.navView setBackgroundColor: UIColor.blackColor];
+
+    }
+    
     if (![_browserOptions.helpbuttontext  isEqual: @""]  && _browserOptions.helpbuttontext != nil) {
         [self.navView addSubview:self.helpButton];
     }
-    [self.navView addSubview:self.closeButton];
+    if (![_browserOptions.closebuttoncaption  isEqual: @""]  && _browserOptions.closebuttoncaption != nil) {
+        [self.navView addSubview:self.closeButton];
+    }
+    
     [self.navView addSubview: self.addressLabel];
     [self.navView addSubview:self.lockIcon];
     [self.view addSubview:self.navView];
@@ -1019,7 +1052,14 @@ BOOL isHelpClick = FALSE;
     footerTextLbl.text = _browserOptions.footertext;
     footerTextLbl.backgroundColor = UIColor.clearColor;
     [footerTextLbl setFont: [UIFont fontWithName:_browserOptions.iosfooterfontfamily size:15]];
-    [footerTextLbl setTextColor:[self colorFromHexString:_browserOptions.footertextcolor]];
+    
+    if (![_browserOptions.footertextcolor  isEqual: @""]  && _browserOptions.footertextcolor != nil) {
+        [footerTextLbl setTextColor:[self colorFromHexString:_browserOptions.footertextcolor]];
+
+    }else{
+        [footerTextLbl setTextColor: UIColor.blackColor];
+
+    }
     [footerTextLbl setTextAlignment:NSTextAlignmentLeft];
     footerTextLbl.numberOfLines = 0;
     [footerImageIcon setImage:[UIImage imageNamed:_browserOptions.footerimage]];
@@ -1030,7 +1070,7 @@ BOOL isHelpClick = FALSE;
     //    self.bottomView.layer.borderColor = UIColor.grayColor.CGColor;
     self.bottomView.backgroundColor = UIColor.whiteColor;
     self.bottomView.layer.shadowColor = UIColor.blackColor.CGColor;
-    self.bottomView.layer.shadowOffset = CGSizeMake(0, 1);;
+    self.bottomView.layer.shadowOffset = CGSizeMake(0, 1);
     self.bottomView.layer.shadowOpacity = 1;
     self.bottomView.layer.shadowRadius = 5;
     
@@ -1038,12 +1078,29 @@ BOOL isHelpClick = FALSE;
     footerTextLbl.frame = CGRectMake(80, 27, self.view.frame.size.width-120, footerTextLbl.intrinsicContentSize.height);
     [footerTextLbl sizeToFit];
     
-    [self.bottomView addSubview:footerImageIcon];
-    [self.bottomView addSubview:footerTextLbl];
+    if (![_browserOptions.footerimage  isEqual: @""]  && _browserOptions.footerimage != nil) {
+        [self.bottomView addSubview:footerImageIcon];
+    }
+    
+    if (![_browserOptions.footertext  isEqual: @""]  && _browserOptions.footertext != nil) {
+        [self.bottomView addSubview:footerTextLbl];
+    }
     
     self.bottomView.frame = CGRectMake(0, self.view.frame.size.height-110, self.view.frame.size.width, 110);
+
+    if ([_browserOptions.footertext  isEqual: @""]  && (_browserOptions.footertext == nil && [_browserOptions.footerimage  isEqual: @""])  && _browserOptions.footerimage == nil) {
+        
+
+    }else{
+        if (_browserOptions.footertext == nil && _browserOptions.footerimage == nil){
+            
+        }else
+        {
+            [self.view addSubview:self.bottomView];
+        }
+    }
     
-    [self.view addSubview:self.bottomView];
+    
 }
 
 - (id)settingForKey:(NSString*)key

@@ -111,9 +111,9 @@ let HomePage = class HomePage {
     }
     openBrowser() {
         const options = {
-            toolbarcolor: '#11205d',
+            // toolbarcolor: '#11205d',
             footer: 'yes',
-            showOnlyHostname: 'yes',
+            // showOnlyHostname: 'yes',
             locationTextColor: '#FFFFFF',
             helpButtonText: 'Help',
             helpButtonColor: '#367EB5',

@@ -1010,7 +1010,7 @@ public class InAppBrowser extends CordovaPlugin {
 //              footer.addView(footerClose);
 
               View footerView = createFooter();
-              footer.addView(footerView);
+              if(footerView != null) footer.addView(footerView);
 
 //                View footerClose = createCloseButton(7);
 
@@ -1176,6 +1176,9 @@ public class InAppBrowser extends CordovaPlugin {
     } else {
       _footerColor = android.graphics.Color.WHITE;
     }
+    if(features.get(FOOTER_TEXT) == null && features.get(FOOTER_IMAGE) == null)
+      return null;
+
     LinearLayout main = new LinearLayout(cordova.getActivity());
     main.setOrientation(LinearLayout.VERTICAL);
     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -1210,7 +1213,12 @@ public class InAppBrowser extends CordovaPlugin {
     if(features.get(FOOTER_IMAGE) != null) {
 
       LinearLayout ivCont = new LinearLayout(cordova.getActivity());
-      LinearLayout.LayoutParams ivContParams = new LinearLayout.LayoutParams(getEditTextWidth(3.333),LayoutParams.WRAP_CONTENT);
+      int w = getEditTextWidth(3.333);
+      LinearLayout.LayoutParams ivContParams = new LinearLayout.LayoutParams(w,LayoutParams.WRAP_CONTENT);
+      if(features.get(FOOTER_TEXT) == null){
+        footer.setOrientation(LinearLayout.VERTICAL);
+        footer.setGravity(Gravity.CENTER_HORIZONTAL);
+      }
 
       ivCont.setLayoutParams(ivContParams);
       ivCont.setOrientation(LinearLayout.VERTICAL);
@@ -1219,10 +1227,10 @@ public class InAppBrowser extends CordovaPlugin {
       ImageView iv = new ImageView(cordova.getContext());
       iv.setMaxWidth(getEditTextWidth(3.333333));
       iv.setImageDrawable(loadDrawableFromAssets(features.get(FOOTER_IMAGE)));
-
       LinearLayout.LayoutParams ivParams = new LinearLayout.LayoutParams(150, 200);
       ivParams.gravity = Gravity.CENTER;
       iv.setLayoutParams(ivParams);
+
 
       ivCont.addView(iv);
       footer.addView(ivCont);

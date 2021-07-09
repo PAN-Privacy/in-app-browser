@@ -2,10 +2,6 @@ import { IonicNativePlugin } from '@ionic-native/core';
 import { Observable } from 'rxjs';
 export interface InAppBrowserOptions {
     /**
-     * Set to yes to show host name
-     */
-    showOnlyHostname?: 'yes' | 'no';
-    /**
      * color of the text in location bar
      */
     locationTextColor?: string;
@@ -117,7 +113,7 @@ export interface InAppBrowserOptions {
     disallowoverscroll?: 'yes' | 'no';
     /** (iOS Only)  Set to yes or no to prevent viewport scaling through a meta tag (defaults to no). */
     enableViewportScale?: 'yes' | 'no';
-    /** (Android Only) Set to yes to show a close button in the footer similar to the iOS Done button. The close button will appear the same as for the header hence use closebuttoncaption and closebuttoncolor to set its properties */
+    /** yes to show footer and no to hide footer. */
     footer?: 'yes' | 'no';
     /** (Android Only) Set to a valid hex color string, for example #00ff00 or #CC00ff00 (#aarrggbb), and it will change the footer color from default. Only has effect if user has footer set to yes */
     footercolor?: string;

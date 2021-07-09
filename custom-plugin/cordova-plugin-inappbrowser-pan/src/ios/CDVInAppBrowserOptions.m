@@ -33,7 +33,8 @@
         self.clearcache = NO;
         self.clearsessioncache = NO;
         self.hidespinner = NO;
-
+        self.footer = NO;
+        
         self.enableviewportscale = NO;
         self.mediaplaybackrequiresuseraction = NO;
         self.allowinlinemediaplayback = NO;
@@ -47,6 +48,7 @@
         self.footerfontfamily= nil;
         self.lefttoright = false;
         self.toolbarcolor = nil;
+        self.locationtextcolor= nil;
         self.toolbartranslucent = YES;
         self.beforeload = @"";
         self.helpbuttontext = nil;

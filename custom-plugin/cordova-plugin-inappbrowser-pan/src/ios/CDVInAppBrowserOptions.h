@@ -22,6 +22,7 @@
 
 @property (nonatomic, assign) BOOL location;
 @property (nonatomic, assign) BOOL toolbar;
+@property (nonatomic, assign) BOOL footer;
 @property (nonatomic, copy) NSString* closebuttoncaption;
 @property (nonatomic, copy) NSString* closebuttoncolor;
 @property (nonatomic, copy) NSString* helpbuttontext;
@@ -32,6 +33,7 @@
 @property (nonatomic, assign) BOOL lefttoright;
 @property (nonatomic, copy) NSString* toolbarposition;
 @property (nonatomic, copy) NSString* toolbarcolor;
+@property (nonatomic, copy) NSString* locationtextcolor;
 
 @property (nonatomic, copy) NSString* footerfontfamily;
 @property (nonatomic, copy) NSString* closebuttonfontfamily;

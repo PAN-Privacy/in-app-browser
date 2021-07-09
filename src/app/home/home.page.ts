@@ -12,13 +12,12 @@ export class HomePage {
   constructor(
     private iab: InAppBrowser,
     private actionSheetController: ActionSheetController
-  ) { }
+  ) {}
 
   openBrowser() {
     const options: InAppBrowserOptions = {
-      // toolbarcolor: '#11205d',
-      footer: 'yes',
-      // showOnlyHostname: 'yes',
+      toolbarcolor: '#11205d',
+      footer: 'no',
       locationTextColor: '#FFFFFF',
       helpButtonText: 'Help',
       helpButtonColor: '#367EB5',

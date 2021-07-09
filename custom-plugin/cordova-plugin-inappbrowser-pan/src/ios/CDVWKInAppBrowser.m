@@ -871,7 +871,7 @@ BOOL isHelpClick = FALSE;
     if (_browserOptions.toolbarcolor != nil && ![_browserOptions.toolbarcolor isEqual:@""]) { // Set toolbar color if user sets it in options
         self.toolbar.barTintColor = [self colorFromHexString:_browserOptions.toolbarcolor];
     }else{
-        self.toolbar.barTintColor = UIColor.blackColor;
+        self.toolbar.barTintColor = [self colorFromHexString:@"#414141"];
 
     }
     if (!_browserOptions.toolbartranslucent) { // Set toolbar translucent to no if user sets it in options
@@ -967,6 +967,15 @@ BOOL isHelpClick = FALSE;
     self.addressLabel.enabled = YES;
     self.addressLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     self.addressLabel.font = [UIFont fontWithName:_browserOptions.ioslocationfontfamily size:15];
+    
+    if (![_browserOptions.locationtextcolor  isEqual: @""]  && _browserOptions.locationtextcolor != nil) {
+        
+        self.addressLabel.textColor = [self colorFromHexString:_browserOptions.locationtextcolor];
+
+    }else{
+        self.addressLabel.textColor = UIColor.whiteColor;
+
+    }
     //    if ([self.addressLabel respondsToSelector:NSSelectorFromString(@"setMinimumScaleFactor:")]) {
     //        [self.addressLabel setValue:@(10.0/[UIFont labelFontSize]) forKey:@"minimumScaleFactor"];
     //    } else if ([self.addressLabel respondsToSelector:NSSelectorFromString(@"setMinimumFontSize:")]) {
@@ -978,7 +987,7 @@ BOOL isHelpClick = FALSE;
     self.addressLabel.opaque = NO;
     self.addressLabel.shadowOffset = CGSizeMake(0.0, -1.0);
     self.addressLabel.backgroundColor = UIColor.clearColor;
-    [self.addressLabel setTextColor:UIColor.whiteColor];
+    //[self.addressLabel setTextColor:UIColor.whiteColor];
     [self.addressLabel setTextAlignment:NSTextAlignmentCenter];
     [self.lockIcon setImage:[UIImage imageNamed:@"lockicon"]];
     [self.lockIcon setContentMode:UIViewContentModeScaleAspectFit];
@@ -989,7 +998,7 @@ BOOL isHelpClick = FALSE;
         [self.helpButton setTitleColor:[self colorFromHexString:_browserOptions.helpbuttoncolor] forState:UIControlStateNormal];
 
     }else{
-        [self.helpButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+        [self.helpButton setTitleColor:[self colorFromHexString:@"#2c80ba"] forState:UIControlStateNormal];
 
     }
     self.helpButton.titleLabel.font = [UIFont fontWithName:_browserOptions.ioshelpfontfamily size:15];
@@ -1001,7 +1010,7 @@ BOOL isHelpClick = FALSE;
         [self.closeButton setTitleColor:[self colorFromHexString:_browserOptions.closebuttoncolor] forState:UIControlStateNormal];
 
     }else{
-        [self.closeButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+        [self.closeButton setTitleColor:[self colorFromHexString:@"#848484"] forState:UIControlStateNormal];
 
     }
     
@@ -1027,7 +1036,7 @@ BOOL isHelpClick = FALSE;
     if (_browserOptions.toolbarcolor != nil && ![_browserOptions.toolbarcolor isEqual:@""]) { // Set toolbar color if user sets it in options
         [self.navView setBackgroundColor: [self colorFromHexString:_browserOptions.toolbarcolor]];
     }else{
-        [self.navView setBackgroundColor: UIColor.blackColor];
+        [self.navView setBackgroundColor: [self colorFromHexString:@"#414141"]];
 
     }
     
@@ -1096,7 +1105,10 @@ BOOL isHelpClick = FALSE;
             
         }else
         {
-            [self.view addSubview:self.bottomView];
+            if (_browserOptions.footer) {
+                [self.view addSubview:self.bottomView];
+
+            }
         }
     }
     
@@ -1340,7 +1352,7 @@ BOOL isHelpClick = FALSE;
     popTextLbl.text = _browserOptions.helppopuptext;
     popTextLbl.backgroundColor = UIColor.clearColor;
     [popTextLbl setFont: [UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
-    [popTextLbl setTextColor: [self colorFromHexString:_browserOptions.footertextcolor]];
+    [popTextLbl setTextColor: UIColor.blackColor];
     [popTextLbl setTextAlignment:NSTextAlignmentLeft];
     popTextLbl.numberOfLines = 0;
     

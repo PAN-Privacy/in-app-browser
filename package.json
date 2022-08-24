@@ -9,7 +9,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "archive:iab-pan": "tar czf custom-plugin/iab-pan.tgz -C custom-plugin iab-pan-package"
   },
   "private": true,
   "dependencies": {

@@ -1,5 +1,5 @@
 {
-  "name": "@ionic-native/in-app-browser-pan",
+  "name": "@awesome-cordova-plugins/in-app-browser-pan",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -8,5 +8,9 @@
   "author": "",
   "license": "UNLICENSED",
   "private": true,
-  "dependencies": {}
+  "dependencies": {},
+  "peerDependencies": {
+    "rxjs": "^5.5.0 || ^6.5.0 || ^7.3.0",
+    "@awesome-cordova-plugins/core": "^5.1.0"
+  }
 }

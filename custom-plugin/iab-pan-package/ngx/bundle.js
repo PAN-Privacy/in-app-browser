@@ -4,7 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var tslib = require('tslib');
 var core$1 = require('@angular/core');
-var core = require('@ionic-native/core');
+var core = require('@awesome-cordova-plugins/core');
 var rxjs = require('rxjs');
 
 var InAppBrowserObject = /** @class */ (function () {
@@ -79,7 +79,7 @@ var InAppBrowser = /** @class */ (function (_super) {
         { type: core$1.Injectable }
     ];
     return InAppBrowser;
-}(core.IonicNativePlugin));
+}(core.AwesomeCordovaNativePlugin));
 
 exports.InAppBrowser = InAppBrowser;
 exports.InAppBrowserObject = InAppBrowserObject;

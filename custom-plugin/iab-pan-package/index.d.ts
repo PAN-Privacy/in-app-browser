@@ -1,4 +1,4 @@
-import { IonicNativePlugin } from '@ionic-native/core';
+import { AwesomeCordovaNativePlugin } from '@awesome-cordova-plugins/core';
 import { Observable } from 'rxjs';
 export interface InAppBrowserOptions {
     /**
@@ -297,7 +297,7 @@ export declare class InAppBrowserObject {
  * InAppBrowserEvent
  * InAppBrowserOptions
  */
-export declare class InAppBrowserOriginal extends IonicNativePlugin {
+export declare class InAppBrowserOriginal extends AwesomeCordovaNativePlugin {
     /**
      * Opens a URL in a new InAppBrowser instance, the current browser instance, or the system browser.
      * @param  url {string}     The URL to load.
